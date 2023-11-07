@@ -15,10 +15,25 @@ export default function CategoriesMenu({
   selectedCategory,
 }) {
   const { t } = useTranslation();
-  const [categories, setCategories] = useState();
+  const [categories, setCategories] = useState([]);
 
-  const urlImg =
-    "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/";
+  const getProductInfoFromCategories = (categories, categoriesProduct) => {
+    const productsInfo = [];
+    categoriesProduct.forEach((productName) => {
+      const foundCategory = categories.find(
+        (category) => category.name === productName
+      );
+      if (foundCategory) {
+        productsInfo.push({ name: foundCategory.name, id: foundCategory.id });
+      }
+    });
+    return productsInfo;
+  };
+
+  const productIds = getProductInfoFromCategories(
+    categories,
+    categoriesProduct
+  );
 
   const { token } = useTokenStore();
   useEffect(() => {
@@ -52,19 +67,29 @@ export default function CategoriesMenu({
                 : t("categoriesMenu.favorites")}
             </h6>
           </button>
-
-          {categoriesProduct.map((category) => (
+          <button
+            type="button"
+            className={`card-products ${
+              selectedCategory === "All" && !showFavorites
+                ? "activeCategory"
+                : "inactiveCategory"
+            }`}
+            onClick={() => filterCategory("All", "All")}
+          >
+            <h6>All</h6>
+          </button>
+          {productIds.map((categoryApi) => (
             <button
               type="button"
               className={`card-products ${
-                selectedCategory === category && !showFavorites
+                selectedCategory === categoryApi.name && !showFavorites
                   ? "activeCategory"
                   : "inactiveCategory"
               }`}
-              key={category}
-              onClick={() => filterCategory(category)}
+              key={categoryApi.id}
+              onClick={() => filterCategory(categoryApi.name, categoryApi.id)}
             >
-              <h6>{category}</h6>
+              <h6>{categoryApi.name}</h6>
             </button>
           ))}
         </div>

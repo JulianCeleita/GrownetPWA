@@ -19,6 +19,8 @@ export const allCategories =
   "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/categories/all";
 export const selectedCategory =
   "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/categoriesProducts/products/{id}";
+export const supplierCategorie =
+  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/products/supplierCategorie";
 
 // PRODUCTS
 export const supplierProducts =
