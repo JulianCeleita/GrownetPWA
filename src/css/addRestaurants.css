@@ -1,0 +1,41 @@
+.add-restaurants{
+    background-color: var(--color-blue-primary);
+    height: 100%;
+    padding: 10rem 0 0rem 0;
+}
+.form-restaurants{
+    background-color: white;
+    border-radius: 40px 40px 0px 0px;
+    height: 100%;
+}
+.add-restaurants h1{
+    font-size: 25px;
+    padding-top: 4rem;
+    font-weight: 600;
+    color: var(--color-blue-primary);
+    text-align: center;
+}
+.add-restaurants form{
+    padding: 0px 2rem;
+    margin-top: 4rem;
+}
+.form-label{
+    font-size: 18px;
+    font-weight: 500;
+    text-align: left !important;
+}
+.add-restaurants input{
+    height: 50px;
+    border: .1px solid hsla(209, 52%, 76%, 0.533);
+}
+.submit-button{
+    text-align: center;
+}
+#submit-button{
+    margin-top: 3rem;
+    padding: 12px 50px;
+}
+::placeholder{
+    text-align: left;
+    font-size: 17px;
+}

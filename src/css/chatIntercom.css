@@ -1,0 +1,36 @@
+.chat-intercom{
+    text-align: center;
+}
+.chat-intercom h1{
+    font-weight: 700;
+    color: var(--color-blue-primary);
+    margin-top: 2rem;
+}
+.chat-intercom img{
+    width: 20%;
+    margin-top: 15vh;
+}
+.chat-intercom .bttn{
+    margin-left: 0;
+}
+.buttons-succesful{
+    margin-top: 2rem;
+}
+.chat-intercom .btn-outline{
+    margin-left: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+/*Mobile*/
+@media screen and (max-width: 800px) {
+    .chat-intercom img{
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 365px) {
+    .chat-intercom .bttn{
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+ }

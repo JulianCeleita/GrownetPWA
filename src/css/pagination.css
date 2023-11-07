@@ -1,0 +1,16 @@
+.pagination-down {
+    display: none;
+}
+ 
+@media(max-width: 991px) {
+    .pagination-up {
+        display: none !important;
+    }
+
+    .pagination-down {
+        position: absolute;
+        bottom: 0;
+        width: -webkit-fill-available;
+        display: block;
+    }
+}

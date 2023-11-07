@@ -1,0 +1,20 @@
+.settings-suppliers{
+    text-align: center;
+}
+.settings-suppliers h1{
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 2rem;
+}
+#supplier-card{
+    background: var(--color-gradient-blue);
+    width: 150px;
+    align-items: center;
+}
+#supplier-card img{
+    width: 100%;
+}
+#supplier-card .plus{
+    margin: 0;
+    margin-top: 10px;
+}

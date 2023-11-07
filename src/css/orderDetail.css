@@ -1,0 +1,254 @@
+.details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#resume{
+    display: none;
+
+}
+.tittle-page{
+    display: flex;
+    align-items: center; 
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.tittle-page h1{
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+}
+#arrow-icon{
+    color: var(--color-dark-blue);
+    font-size: 1.5rem;
+    position: absolute;
+    right: 0px;
+    left: 10%;
+    top: 37px
+}
+.underline{
+    font-size: 20px;
+    font-weight: 600;
+    padding-bottom: 8px;
+    border-bottom: 1px solid;
+    margin-bottom: 10px !important;
+    margin-top: 1rem !important;
+}
+.details h3{
+    margin-bottom: 0px;
+    font-size: 18px;
+    padding-top: 2px;
+}
+.product-detail{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7px;
+    align-items: center;
+}
+#trash{
+    margin-left: 8px;
+    font-size: 18px;
+    color: var(--color-danger);
+    cursor: pointer;
+}
+
+.details p{
+    font-size: 17px;
+    color: #868686;
+    margin-bottom: 0px;
+    margin-top: 6px;
+}
+.total-detail{
+    background-color: #BBFACF;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.details .form-select{
+    border: none;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.04);
+    width: 100px;
+}
+.total-detail h2{
+    font-size: 18px;
+    font-weight: 700;
+}
+.details a{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+#tax-font{
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid;
+    border-style: none none dashed none;
+}
+#decrement{
+    padding: 5px 5px 5px 15px;
+}
+#increment{
+    padding: 5px 15px 5px 5px;
+}
+.type-details{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+/*parte 2*/
+.data-shipping h3{
+    margin-bottom: 10px;
+}
+.data-shipping input{
+    margin-bottom: 10px;
+}
+.data-shipping{
+    margin: 1rem;
+    margin-top: 0;
+}
+.react-datepicker{
+    font-family: var(--poppins) !important;
+    border: none !important;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 10px !important;
+}
+.react-datepicker__current-month{
+    font-weight: 600 !important; 
+    color: var(--color-light-green)  !important;
+}
+.react-datepicker__day-name{
+    color: white !important;
+}
+.react-datepicker__header{
+    background-color: var(--color-dark-blue) !important;
+    border-top-right-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+}
+.react-datepicker__day--selected{
+    background-color: var(--color-blue-primary) !important;
+    color: white !important;
+}
+.react-datepicker__day--keyboard-selected{
+    background-color: transparent !important;
+}
+.react-datepicker__navigation-icon::before{
+    border-color: var(--color-light-green) !important;
+    border-width: 2px 2px 0 0 !important; 
+}
+.react-datepicker__navigation--next {
+    margin-top: 3px;
+    color: var(--color-blue-primary) !important;
+}
+.react-datepicker__navigation--previous{
+    margin-top: 3px;
+}
+/*imagen de hecho*/
+.order-succesful{
+    text-align: center;
+}
+.order-succesful h1{
+    font-weight: 700;
+    color: var(--color-blue-primary);
+    margin-top: 2rem;
+}
+.order-succesful img{
+    width: 20%;
+    margin-top: 6rem;
+}
+.order-succesful .bttn{
+    margin-left: 0;
+}
+.buttons-succesful{
+    margin-top: 2rem;
+}
+.order-succesful .btn-outline{
+    margin-left: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+/*Mobile*/
+@media screen and (max-width: 800px) {
+    .order-succesful img{
+        width: 70%;
+    }
+}
+@media screen and (min-width: 900px) {
+    .tittle-page{
+        position: relative;
+    }
+    #arrow-icon{
+        color: var(--color-dark-blue);
+        font-size: 1.5rem;
+        position: absolute;
+        left: -60px;
+        top: 20px;
+    }
+}
+@media screen and (max-width: 365px) {
+    .card-invoices{
+        width: 95%;
+    }
+      .details .arrow{
+        font-size: 1.5rem;
+        position: absolute;
+        right: 11rem;
+        top: 2.2rem;
+        color: var(--color-dark-blue);
+    }
+    input{
+        width: 90%;
+    }
+    textarea{
+        width: 90%;
+    }
+    .data-shipping{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .date-shipping input{
+        user-select: none;
+    }
+    .order-succesful .bttn{
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+ }
+ /*PDF*/
+ #h3{
+    margin-bottom: 0px;
+    font-size: 18px;
+    padding-top: 2px;
+    font-weight: 500;
+ }
+ #p{
+    font-size: 17px;
+    color: #868686;
+    margin-bottom: 5px;
+    text-align: left;
+ }
+ .payment-pdf{
+    padding-right: 40%;
+ }
+ #h2-total{
+    font-size: 18px;
+    font-weight: 700;
+ }
+ #tax-pdf{
+    margin-top: 1rem;
+ }
+ /*alert*/
+#text-alert{
+    margin-top: 5px !important;
+ }
+ .alert-delete{
+    margin-top: 10px;
+ }
+#span-product{
+    font-weight: 600;
+    color: var(--color-danger);
+}

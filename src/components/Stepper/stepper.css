@@ -1,0 +1,43 @@
+ /*Stepper*/
+ .counter{
+    display: flex;
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.04);
+    background-color: white;
+    border-radius: 45px;
+    align-items: center;
+    justify-content: space-around;
+}
+.counter button{
+    background-color: white;
+    border: none;
+    color: var(--color-green);
+    font-size: 20px;
+    padding: 0;
+    cursor: pointer;
+    margin: 0;
+    font-weight: 500;
+}
+#decrement{
+    border-radius: 45px 0 0 45px;
+}
+#increment{
+    border-radius: 0 45px 45px 0;
+}
+.counter input{
+    width: 40px;
+    padding: 0;
+    border-radius: 0px;
+    font-weight: 500;
+    background-color: white;
+    color: var(--color-dark-blue);
+    outline: none;
+}
+input[type="number"]{
+    -moz-appearance: textfield;
+    text-align: center;
+    font-size: 18px;
+}
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}

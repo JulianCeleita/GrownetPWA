@@ -1,0 +1,151 @@
+.login {
+  background-color: var(--color-blue-primary);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+.login-form {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+.text-form {
+  text-align: center;
+  font-size: 16px;
+}
+
+.react-tel-input .form-control {
+  padding: 25px;
+  font-family: var(--poppins);
+  font-size: 18px !important;
+  color: var(--color-dark-blue);
+  border-radius: 50px !important;
+  padding-left: 3rem;
+}
+.react-tel-input .flag-dropdown {
+  border: none !important;
+  background-color: transparent !important;
+  margin-left: 6px;
+  color: var(--color-dark-blue);
+}
+.react-tel-input .flag-dropdown.open .selected-flag {
+  background-color: transparent !important;
+}
+.selected-flag {
+  background-color: transparent !important;
+}
+.country-list {
+  font-family: var(--poppins);
+  text-align: left;
+  color: var(--color-dark-blue);
+}
+.img-login {
+  width: 90%;
+  padding-bottom: 2rem;
+}
+.btn-large {
+  margin-top: 1rem;
+  width: 100%;
+  border-radius: 16px;
+}
+.text-center button {
+  margin-top: 2rem !important;
+}
+
+.cont-forms {
+  height: 85vh;
+  display: grid;
+  align-items: center;
+  background: rgb(13 110 253 / 50%);
+  border-radius: 8px;
+}
+.login h2 {
+  color: white;
+  font-size: 15px;
+  font-weight: 300;
+  text-align: center;
+  padding-top: 2rem;
+}
+.login a {
+  font-weight: 500;
+  color: var(--color-light-green);
+  text-decoration: none;
+}
+.login a:hover {
+  color: var(--color-cyan);
+}
+
+@media (max-width: 760px) {
+  .img-login {
+    width: 80%;
+  }
+}
+
+@media (min-width: 992px) {
+  .cont-forms {
+    margin: 2em !important;
+  }
+
+  .form {
+    background: white;
+    padding: 2em !important;
+    border-radius: 8px;
+  }
+}
+/*CSS alert*/
+.modal {
+  --bs-modal-border-color: none !important;
+  --bs-modal-bg: none !important;
+}
+.modal.show .modal-dialog {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.modal-dialog {
+  margin: 0px !important;
+  position: fixed !important;
+  bottom: 0;
+}
+.alerta {
+  font-family: var(--poppins);
+  background-color: white;
+  color: var(--color-dark-blue);
+  padding: 1.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40px 40px 0px 0px;
+}
+.error {
+  text-align: center;
+  font-size: 45px;
+  color: var(--color-danger);
+  padding-bottom: 15px;
+}
+.alerta p {
+  font-size: 16px;
+  margin: 0px !important;
+}
+#close {
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.5s all;
+  margin: 0;
+}
+#close:hover {
+  transform: scale(1.1);
+}
+#number-phone,
+#number-otp {
+  margin-top: 10px !important;
+  font-weight: 600;
+  color: var(--color-blue-primary);
+  margin-bottom: 10px !important;
+}

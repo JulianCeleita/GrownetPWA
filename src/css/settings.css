@@ -1,0 +1,127 @@
+.settings{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.saludo{
+    display: flex;
+    text-align: left;
+}
+.settings h1{
+    color: var(--color-blue-primary);
+    font-weight: 600;
+    font-size: 30px;
+    padding-top: 3rem;
+}
+.settings h4{
+    font-weight: 600;
+    margin-bottom: 0px;
+    margin-top: 1rem;
+}
+.settings-button{
+    padding: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    margin: 10px;
+    background: var(--color-gradient-dark-blue);
+    border-radius: 15px;
+}
+.text-button{
+    width: 200px;
+    text-align: left;
+}
+.text-button h2{
+    font-size: 25px;
+}
+.settings p{
+    margin-bottom: 0px;
+    font-weight: 300;
+    font-size: 16px;
+}
+.plus{
+    margin-left: 25px;
+    font-size: 35px;
+}
+.dropdown-toggle::after{
+    display: none !important;
+}
+.settings-options{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.settings-options a{
+    border-radius: 7px;
+    color: var(--color-dark-blue);
+    background-color: #FBFBFB;
+    width: 300px;
+    border: none;
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.09);
+    text-align: left;
+    align-items: center;
+}
+#setting-button{
+    display: flex;
+    justify-content: space-between;
+}
+.settings-options h2{
+    font-size: 18px;
+    width: 90%;
+    margin-left: -11px;
+}
+.icon-arrow{
+    font-size: 15px;
+}
+#log-out{
+    font-size: 18px;
+    color: var(--color-blue-primary) !important; 
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    border: none;
+    background-color: transparent;
+} 
+.icon-logout{
+    font-size: 25px;
+}
+/*acordion*/
+#idiomas{
+    border-radius: 10px!important;
+    background-color: #FBFBFB;
+    width: 300px;
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.09);
+    margin-bottom: 8px;
+}
+.settings .accordion-item:last-of-type .accordion-button.collapsed {
+    border-radius: 12px !important;
+    border: none !important;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-dark-blue);
+}
+.settings .accordion-item {
+    color: var(--bs-accordion-color);
+    background-color: var(--bs-accordion-bg);
+    border: none !important;
+}
+.settings .accordion-button:not(.collapsed) {
+    background-color: var(--background-light-blue) !important;
+    box-shadow: none !important;
+    font-size: 18px;
+    font-weight: 500;
+}
+.settings .accordion-button::after {
+    margin-left: 8rem !important;
+}
+#banderas{
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+#banderas a{
+    font-size: 18px;
+    margin-left: 12px;
+    color:var(--color-dark-blue);
+    text-decoration:none;
+}

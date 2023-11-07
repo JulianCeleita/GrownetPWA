@@ -1,0 +1,121 @@
+.pending-record{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.pending-record h1{
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+#tax-tittle{
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid;
+    border-style: none none dashed none;
+    text-align: left;
+}
+.pending-record #arrow-icon{
+    color: var(--color-dark-blue);
+    font-size: 1.5rem;
+    position: absolute;
+    right: 0px;
+    left: 30px;
+    top: 50px
+}
+.pending-record h3{
+    margin-bottom: 0px;
+    font-size: 18px;
+    padding-top: 2px;
+    margin-bottom: 0px;
+}
+#name-pendingRecord{
+   margin-right: 2rem !important; 
+}
+.pending-record p{
+    font-size: 17px;
+    color: #868686;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    text-align: left;
+}
+.pending-record .menu-space{
+    margin-bottom: 8rem  !important;
+}
+/*Tab*/
+.pending-record .nav-link{
+    color: var(--color-dark-blue) !important;
+}
+/*Reception*/
+.pending-record .form-check-input{
+    vertical-align: 0px !important;
+    margin-top: 0px !important;
+}
+.pending-record .form-check-input:checked{
+    background-color: var(--color-green) !important;
+    border-color: var(--color-green) !important;
+}
+#record-btn{
+    margin: 0;
+    padding: 8px 10px;
+}
+.card-pending-record{
+    box-shadow: rgba(7, 33, 58, 0.12) 0px 0px 24px;
+    border-radius: 15px;
+    padding: 2rem;
+    width: 340px;
+}
+.card-pending-record .product-detail{
+    padding-bottom: 0;
+    padding-top: 10px;
+}
+.card-pending-record h1{
+    font-size: 20px;
+    margin: 0;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+#correct-icon{
+    font-size: 60px;
+    color: rgba(124, 124, 124, 0.70);
+    background-color: transparent;
+}
+.product-detail path{
+    box-shadow: rgba(7, 33, 58, 0.12) 0px 0px 24px;
+}
+#check-products{
+    padding-top: 0px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+.warning-record{
+    color: #A4A4A4;
+    text-decoration: none;
+    font-weight: 400;
+}
+.pending-record a:hover{
+    color: #C46262;
+}
+.card-pending-record button{
+    margin-top: 1rem;
+}
+.calification-reception{
+    text-align: right;
+}
+.card-pending-record{
+    text-align: center;
+}
+@media screen and (min-width: 800px) {
+    .pending-record .tittle-page{
+        position: relative;
+    }
+    .pending-record #arrow-icon{
+        color: var(--color-dark-blue);
+        font-size: 1.5rem;
+        position: absolute;
+        left: -60px;
+        top: 33px;
+    }
+}

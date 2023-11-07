@@ -1,0 +1,235 @@
+/*Productos*/
+.products {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.elements {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.tittle-products {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  font-size: 25px;
+  font-weight: 600;
+}
+.products .arrow {
+  font-size: 1.5rem;
+  position: absolute;
+  right: 15rem;
+  top: 1.5rem;
+}
+
+/*Tarjeta producto*/
+.elements {
+  box-shadow: rgba(7, 33, 58, 0.12) 0px 0px 24px;
+  width: 350px;
+  display: flex;
+  padding: 1rem;
+  border-radius: 20px;
+  background-color: white;
+  z-index: 1;
+}
+.elements img {
+  width: 120px;
+  margin-right: 8px;
+  margin-left: 0px;
+}
+.titlle-products {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.product-selectUom {
+  font-size: 16px !important;
+  color: #868686 !important;
+  margin-bottom: 0 !important;
+  font-weight: 400 !important;
+}
+.heart-icon {
+  width: 2rem;
+  height: 2rem;
+  padding: 5px;
+}
+.elements p {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--color-blue-primary);
+  margin-bottom: 5px;
+}
+.elements h1 {
+  margin-bottom: 0px;
+  font-size: 18px;
+  font-weight: 500;
+}
+.product-amount {
+  display: flex;
+  margin-top: 7px;
+}
+.product-amount #my-input {
+  width: 30px;
+}
+.product-amount .counter {
+  border: 1px solid #dee2e6;
+  margin-right: 5px;
+}
+.product-amount .counter input {
+  font-size: 17px;
+  margin-right: 0px;
+}
+.product-amount #increment {
+  padding: 5px 10px 5px 5px;
+}
+.product-amount #decrement {
+  padding: 5px 5px 5px 10px;
+}
+.form-select {
+  border-radius: 45px !important;
+  font-weight: 500 !important;
+  color: var(--color-dark-blue) !important;
+  font-size: 17px !important;
+}
+.products option {
+  color: var(--color-dark-blue);
+}
+/*promo*/
+.promo {
+  background-color: var(--background-light-blue);
+  width: 330px;
+  padding: 10px;
+  padding-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 0px 0px 20px 20px;
+  margin-top: -1rem;
+  z-index: 0;
+  pointer-events: auto;
+  margin-bottom: 15px;
+}
+.promo h4 {
+  font-size: 18px;
+  font-weight: 600;
+}
+.promo h5 {
+  font-size: 18px;
+  font-weight: 500;
+}
+.promo .form-check-input {
+  vertical-align: 0px !important;
+  margin-top: 0px !important;
+}
+.promo .form-check-input:checked {
+  background-color: var(--color-green) !important;
+  border-color: var(--color-green) !important;
+}
+/*Favoritos*/
+/*.pr{
+  position: relative;
+}*/
+.img-product {
+  box-shadow: rgba(7, 33, 58, 0.2) 0px 0px 24px;
+  border-radius: 15px;
+  width: 100%;
+}
+
+.fav-icon {
+  background-color: white;
+  border-radius: 100%;
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 5px;
+}
+.space-CatgMenu {
+  margin-bottom: 13rem;
+}
+.icon-search{
+  font-size: 32px;
+  position: absolute;
+  right: 0px;
+  left: 250px;  
+  top: 12px;
+  cursor: pointer;
+}
+#tittleProducts{
+margin-top: 1rem;
+}
+
+@media screen and (max-width: 893px) {
+.icon-search{
+  font-size: 32px;
+  position: absolute;
+  right: 0px;
+  left: 80%;
+  margin-top: 1rem;
+}
+}
+  @media screen and (max-width: 350px) {
+    .elements{
+     width: 90%;
+   }
+   .product-amount #my-input{
+     width: 20px;
+   }
+   .elements img{
+     width: 25%;
+     margin-right: 5px;
+   }
+   .promo{
+     width: 280px
+   }
+  }
+    
+// Loader para productos
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  margin: 20px 0;
+}
+
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .elements {
+    width: 90%;
+  }
+  .product-amount #my-input {
+    width: 20px;
+  }
+  .elements img {
+    width: 25%;
+    margin-right: 5px;
+  }
+  .promo {
+    width: 280px;
+  }
+  .products .arrow {
+    position: absolute;
+    right: 13.8rem;
+    top: 1.5rem;
+  }
+}
