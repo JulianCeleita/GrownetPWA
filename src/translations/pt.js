@@ -112,7 +112,6 @@ const ptTranslations = {
     title: "O que deu errado?",
     wrong: "Quantidade errada",
     defective: "Defeituoso",
-    other: "Outro",
     enterQuantity: "Digite a quantidade entregue:",
     addComent: "Adicionar um comentário:",
     sendNextOrder: "Enviar com o próximo pedido",

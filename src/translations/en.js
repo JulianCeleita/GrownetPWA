@@ -112,7 +112,6 @@ const enTranslations = {
     title: "What went wrong?",
     wrong: "Wrong quantity",
     defective: "Defective",
-    other: "Other",
     enterQuantity: "Enter quantity delivered:",
     addComent: "Add a comment:",
     sendNextOrder: "Send with next order",
