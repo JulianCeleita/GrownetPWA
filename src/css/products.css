@@ -186,7 +186,7 @@ margin-top: 1rem;
    }
   }
     
-// Loader para productos
+/* Loader para productos */
 .loader-container {
   display: flex;
   justify-content: center;
