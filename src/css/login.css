@@ -60,7 +60,7 @@
   height: 85vh;
   display: grid;
   align-items: center;
-  background: rgb(13 110 253 / 50%);
+  background: rgba(13, 110, 253, 0.5);
   border-radius: 8px;
 }
 .login h2 {
