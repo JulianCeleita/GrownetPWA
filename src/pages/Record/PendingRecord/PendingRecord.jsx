@@ -1,17 +1,20 @@
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Tab, Tabs, Form } from "react-bootstrap";
+import { Form, Tab, Tabs } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import MenuPrimary from "../../../components/Menu/MenuPrimary";
-import { selectedStorageOrder } from "../../../config/urls.config";
+import {
+  closeSelectedOrder,
+  createDisputeOrder,
+  selectedStorageOrder,
+} from "../../../config/urls.config";
 import "../../../css/pendingRecord.css";
 import "../../../css/reception.css";
 import useRecordStore from "../../../store/useRecordStore";
 import useTokenStore from "../../../store/useTokenStore";
-import { closeSelectedOrder } from "../../../config/urls.config";
-import Modal from "react-bootstrap/Modal";
 
 export default function PendingRecord() {
   const { t } = useTranslation();
@@ -20,10 +23,9 @@ export default function PendingRecord() {
   const [evidences, setEvidences] = useState([]);
   const [buttonEvidence, setButtonEvidence] = useState("upload");
   const [showEvidencesModal, setShowEvidencesModal] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState({});
   const { selectedPendingOrder, detailsToShow, setDetailsToShow } =
     useRecordStore();
-
-  console.log("detalles de productos", detailsToShow);
 
   useEffect(() => {
     if (evidences.length === 0) {
@@ -80,9 +82,45 @@ export default function PendingRecord() {
 
   // ENVIAR EVIDENCIAS
   const onSendEvidences = () => {
-    setShowEvidencesModal(true);
-    setEvidences([]);
-    setButtonEvidence("upload");
+    const formData = new FormData();
+
+    const disputeBody = {
+      order: selectedPendingOrder,
+      evidence_id: detailsToShow.evidences_id,
+    };
+    for (let key in disputeBody) {
+      if (disputeBody.hasOwnProperty(key)) {
+        formData.append(key, disputeBody[key]);
+      }
+    }
+    evidences.forEach((file) => {
+      formData.append("evidences[]", file);
+    });
+
+    axios
+      .post(createDisputeOrder, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setShowEvidencesModal(true);
+        setEvidences([]);
+        setButtonEvidence("upload");
+      })
+      .catch((error) => {
+        console.error("Error al crear la disputa:", error);
+      });
+  };
+
+  // CHECK DE PRODUCTOS
+  const toggleProductSelection = (productId) => {
+    setSelectedProducts((prevSelectedProducts) => ({
+      ...prevSelectedProducts,
+      [productId]: !prevSelectedProducts[productId],
+    }));
   };
 
   return (
@@ -146,22 +184,25 @@ export default function PendingRecord() {
                 <form className="card-pending-record">
                   <h1>{t("pendingRecord.check")}</h1>
                   {detailsToShow.products?.map((product) => (
-                    <div className="product-check" key={product.id}>
+                    <div className={`product-check ${selectedProducts[product.id] ? 'selected' : ''}`} 
+                    key={product.id}
+                    onClick={() => toggleProductSelection(product.id)}
+                    >
                       <div className="product-detail" id="check-products">
                         <div>
                           <h3>{product.name}</h3>
-                          <p>
-                            {product.quantity} {product.uom}
-                          </p>
-                        </div>
-                        <div className="calification-reception">
-                          <Form.Check id="flexCheck" />
                           <Link
                             to={`/record/reception/${product.id}/${product.name}/${product.quantity}/${product.uom}`}
                             className="warning-record"
                           >
                             {t("pendingRecord.openDispute")}
                           </Link>
+                          
+                        </div>
+                        <div className="calification-reception">
+                        <p>
+                            {product.quantity} {product.uom}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -222,11 +263,6 @@ export default function PendingRecord() {
               </div>
             </Tab>
           </Tabs>
-          <button
-            onClick={() => {
-              setShowEvidencesModal(true);
-            }}
-          ></button>
 
           {/* MODAL DE ENVIO DE EVIDENCIAS */}
           <Modal

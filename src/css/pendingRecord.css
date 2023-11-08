@@ -107,6 +107,20 @@
 .card-pending-record{
     text-align: center;
 }
+.product-check {
+    border-radius: 10px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+  }
+.product-check.selected {
+    background-color: var(--color-dark-blue);
+    color: white;
+    padding: 0.5px 10px 0.5px 10px;
+    margin-bottom: 1px;
+  }
+  .product-check.selected p {
+    color: white;
+  }
 @media screen and (min-width: 800px) {
     .pending-record .tittle-page{
         position: relative;

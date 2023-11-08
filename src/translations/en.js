@@ -96,7 +96,7 @@ const enTranslations = {
     tabProducts: "Products",
     tabReception: "Reception",
     check: "Check your products",
-    openDispute: "Open dispute",
+    openDispute: "Dispute",
     confirmOrder: "Confirm order",
     supplierDetail: "Supplier details",
     detailsItem: "Detail items",
