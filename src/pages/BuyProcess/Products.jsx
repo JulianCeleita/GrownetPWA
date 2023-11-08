@@ -26,6 +26,7 @@ export default function Products(props) {
   const [resetInput, setResetInput] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const loader = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchProducts = async (page = 0) => {
     const requestBody = {
@@ -248,29 +249,31 @@ export default function Products(props) {
   const toggleProductSearch = () => {
     setShowProductSearch(!showProductSearch);
   };
-  // PAGINATION
 
+  // PAGINATION
   useEffect(() => {
     const currentLoader = loader.current;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
+          setLoading(true);
           setCurrentPage((prevPage) => prevPage + 1);
+          const timer = setTimeout(() => {
+            setLoading(false);
+          }, 3000);
+          return () => clearTimeout(timer);
         }
       },
       { threshold: 1.0 }
     );
-
     if (loader.current) {
       observer.observe(loader.current);
     }
-
     return () => {
       if (currentLoader) {
         observer.unobserve(currentLoader);
       }
     };
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -329,9 +332,12 @@ export default function Products(props) {
             </>
           )}
         </>
+      )}{loading && (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
       )}
       <div ref={loader} className="loader-container">
-        <div className="loader"></div>
       </div>
       <div className="space-CatgMenu"></div>
       {
