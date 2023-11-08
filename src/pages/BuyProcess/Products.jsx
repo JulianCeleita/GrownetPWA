@@ -75,7 +75,7 @@ export default function Products(props) {
           )
         );
       useOrderStore.setState({ articlesToPay: productsWithTax });
-      useOrderStore.setState({ categories: productsWithTax });
+
       setArticles((prevProducts) => {
         const productIds = new Set(prevProducts.map((p) => p.id));
         const newProducts = productsWithTax.filter(
@@ -172,43 +172,18 @@ export default function Products(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const hasMoreProductsToLoad = () => {
-        return articlesToPay.length > products.length;
-      };
-
       if (articlesToPay.length > 0) {
-        setArticles((prevArticles) => {
-          const productIds = new Set(prevArticles.map((p) => p.id));
-          const newArticles = articlesToPay.filter(
-            (p) => !productIds.has(p.id)
-          );
-          return [...prevArticles, ...newArticles];
-        });
+        setArticles(articlesToPay);
 
-        setProducts((prevProducts) => {
-          const productIds = new Set(prevProducts.map((p) => p.id));
-          const newProducts = articlesToPay.filter(
-            (p) => !productIds.has(p.id)
-          );
-          return [...prevProducts, ...newProducts];
-        });
+        setProducts(articlesToPay);
 
-        if (hasMoreProductsToLoad()) {
-          await fetchProducts(currentPage + 1);
-        }
       } else {
         await fetchProducts(currentPage);
       }
     };
 
     fetchData();
-    const hasMore = articlesToPay.length > products.length;
-    if (!hasMore) {
-      const loaderElement = loader.current;
-      if (loaderElement) {
-        loaderElement.style.display = "none";
-      }
-    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
@@ -260,12 +235,6 @@ export default function Products(props) {
     useOrderStore.setState({ articlesToPay: updatedArticlesToPay });
   };
 
-  // FILTRO
-  const allCategories = [
-    "All",
-    ...new Set(categories.map((article) => article.nameCategorie)),
-  ];
-  const productsCategory = allCategories;
 
   const filterCategories = async (category, categoryId) => {
     setSelectedCategory(category);
@@ -374,7 +343,6 @@ export default function Products(props) {
         <CategoriesMenu
           showFavorites={showFavorites}
           toggleShowFavorites={toggleShowFavorites}
-          categoriesProduct={productsCategory}
           filterCategory={filterCategories}
           selectedCategory={selectedCategory}
         />

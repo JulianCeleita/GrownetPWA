@@ -6,39 +6,26 @@ import { Link } from "react-router-dom";
 import { allCategories } from "../../config/urls.config";
 import useTokenStore from "../../store/useTokenStore";
 import "./categoriesMenu.css";
+import useOrderStore from "../../store/useOrderStore";
 
 export default function CategoriesMenu({
   showFavorites,
   toggleShowFavorites,
-  categoriesProduct,
   filterCategory,
   selectedCategory,
 }) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
 
-  const getProductInfoFromCategories = (categories, categoriesProduct) => {
-    const productsInfo = [];
-    categoriesProduct.forEach((productName) => {
-      const foundCategory = categories.find(
-        (category) => category.name === productName
-      );
-      if (foundCategory) {
-        productsInfo.push({ name: foundCategory.name, id: foundCategory.id });
-      }
-    });
-    return productsInfo;
-  };
+  const { selectedSupplier } = useOrderStore();
 
-  const productIds = getProductInfoFromCategories(
-    categories,
-    categoriesProduct
-  );
 
   const { token } = useTokenStore();
+  // Asumiendo que 'idsupplier' es una variable con el ID que deseas pasar
+
   useEffect(() => {
     axios
-      .get(allCategories, {
+      .get(`${allCategories}?supplier_id=${selectedSupplier.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -49,8 +36,9 @@ export default function CategoriesMenu({
       .catch((error) => {
         console.error("Error al obtener los datos de la API:", error);
       });
-  }, []);
-
+  }, [selectedSupplier, token]);
+  console.log("categories:", categories);
+  console.log("token:", token);
   return (
     <section className="menu-categories me-auto">
       <div className="contenido">
@@ -78,7 +66,9 @@ export default function CategoriesMenu({
           >
             <h6>All</h6>
           </button>
-          {productIds.map((categoryApi) => (
+
+          {categories.map((categoryApi) => (
+
             <button
               type="button"
               className={`card-products ${
