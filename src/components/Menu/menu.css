@@ -32,6 +32,9 @@ a.icons.active .icon-active2 {
 a.icons.active .icon-active3 {
     display: block !important;
 }
+a.icons.active .icon-active4 {
+    display: block !important;
+}
 
 .icon-active{
     position: absolute;
@@ -48,7 +51,7 @@ a.icons.active .icon-active3 {
     z-index: -1;
     display: none;
     bottom: 47px;
-    left: 14px;
+    left: 20px;
 }
 .icon-active3{
     position: absolute;
@@ -56,7 +59,7 @@ a.icons.active .icon-active3 {
     z-index: -1;
     display: none;
     bottom: 47px;
-    left: 15px;
+    left: 16px;
 }
 .icon-active4{
     position: absolute;
