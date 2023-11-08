@@ -1,23 +1,37 @@
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Tab, Tabs, Form } from "react-bootstrap";
+import { Form, Tab, Tabs } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import MenuPrimary from "../../../components/Menu/MenuPrimary";
-import { selectedStorageOrder } from "../../../config/urls.config";
+import {
+  closeSelectedOrder,
+  createDisputeOrder,
+  selectedStorageOrder,
+} from "../../../config/urls.config";
 import "../../../css/pendingRecord.css";
+import "../../../css/reception.css";
 import useRecordStore from "../../../store/useRecordStore";
 import useTokenStore from "../../../store/useTokenStore";
-import { closeSelectedOrder } from "../../../config/urls.config";
-import Modal from "react-bootstrap/Modal";
 
 export default function PendingRecord() {
   const { t } = useTranslation();
   const { token } = useTokenStore();
   const [show, setShow] = useState(false);
+  const [evidences, setEvidences] = useState([]);
+  const [buttonEvidence, setButtonEvidence] = useState("upload");
+  const [showEvidencesModal, setShowEvidencesModal] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState({});
   const { selectedPendingOrder, detailsToShow, setDetailsToShow } =
     useRecordStore();
+
+  useEffect(() => {
+    if (evidences.length === 0) {
+      setButtonEvidence("upload");
+    }
+  }, [evidences]);
 
   useEffect(() => {
     axios
@@ -33,6 +47,16 @@ export default function PendingRecord() {
         console.log(error);
       });
   }, []);
+
+  const handleFilesChange = (e) => {
+    if (e.target.files.length > 4) {
+      alert("No puedes subir más de 4 imágenes.");
+      return;
+    }
+    const fileArray = Array.from(e.target.files);
+    setEvidences(fileArray);
+    setButtonEvidence("submit");
+  };
 
   // CERRAR LA ORDEN SELECCIONADA
   const onCloseOrder = (e) => {
@@ -54,6 +78,49 @@ export default function PendingRecord() {
       .catch((error) => {
         console.log("Error al cerrar la orden", error);
       });
+  };
+
+  // ENVIAR EVIDENCIAS
+  const onSendEvidences = () => {
+    const formData = new FormData();
+
+    const disputeBody = {
+      order: selectedPendingOrder,
+      evidence_id: detailsToShow.evidences_id,
+    };
+    for (let key in disputeBody) {
+      if (disputeBody.hasOwnProperty(key)) {
+        formData.append(key, disputeBody[key]);
+      }
+    }
+    evidences.forEach((file) => {
+      formData.append("evidences[]", file);
+    });
+
+    axios
+      .post(createDisputeOrder, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setShowEvidencesModal(true);
+        setEvidences([]);
+        setButtonEvidence("upload");
+      })
+      .catch((error) => {
+        console.error("Error al crear la disputa:", error);
+      });
+  };
+
+  // CHECK DE PRODUCTOS
+  const toggleProductSelection = (productId) => {
+    setSelectedProducts((prevSelectedProducts) => ({
+      ...prevSelectedProducts,
+      [productId]: !prevSelectedProducts[productId],
+    }));
   };
 
   return (
@@ -117,26 +184,75 @@ export default function PendingRecord() {
                 <form className="card-pending-record">
                   <h1>{t("pendingRecord.check")}</h1>
                   {detailsToShow.products?.map((product) => (
-                    <div className="product-check" key={product.id}>
+                    <div className={`product-check ${selectedProducts[product.id] ? 'selected' : ''}`} 
+                    key={product.id}
+                    onClick={() => toggleProductSelection(product.id)}
+                    >
                       <div className="product-detail" id="check-products">
                         <div>
                           <h3>{product.name}</h3>
-                          <p>
-                            {product.quantity} {product.uom}
-                          </p>
-                        </div>
-                        <div className="calification-reception">
-                          <Form.Check id="flexCheck" />
                           <Link
                             to={`/record/reception/${product.id}/${product.name}/${product.quantity}/${product.uom}`}
                             className="warning-record"
                           >
                             {t("pendingRecord.openDispute")}
                           </Link>
+                          
+                        </div>
+                        <div className="calification-reception">
+                        <p>
+                            {product.quantity} {product.uom}
+                          </p>
                         </div>
                       </div>
                     </div>
                   ))}
+                  <div className="uploaded-images">
+                    {evidences.map((file, index) => (
+                      <div key={index} className="image-preview">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt="uploaded-preview"
+                          width="30"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newEvidences = [...evidences];
+                            newEvidences.splice(index, 1);
+                            setEvidences(newEvidences);
+                          }}
+                        >
+                          X
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  {buttonEvidence === "upload" && (
+                    <label className="custom-file-upload">
+                      <input
+                        type="file"
+                        onChange={handleFilesChange}
+                        multiple
+                        required
+                      />
+                      <Icon id="upload-icon" icon="tabler:upload" />{" "}
+                      {t("reception.customUpload")}
+                    </label>
+                  )}
+                  {buttonEvidence === "submit" && (
+                    <label
+                      type="submit"
+                      className="custom-file-upload"
+                      onClick={onSendEvidences}
+                    >
+                      {t("reception.submitEvidence")}{" "}
+                      <Icon
+                        id="upload-icon"
+                        icon="tabler:arrow-big-right-filled"
+                      />
+                    </label>
+                  )}
                   <button
                     className="bttn btn-primary"
                     onClick={(e) => onCloseOrder(e)}
@@ -148,6 +264,29 @@ export default function PendingRecord() {
             </Tab>
           </Tabs>
 
+          {/* MODAL DE ENVIO DE EVIDENCIAS */}
+          <Modal
+            show={showEvidencesModal}
+            onHide={() => setShowEvidencesModal(false)}
+            className="modal-dispute"
+          >
+            <section className="alerta">
+              <Icon
+                icon="fluent-emoji:party-popper"
+                className="icon-reception"
+              />
+              <h1>
+                {t("pendingRecord.modalTittle")}{" "}
+                <span className="grownet-pending">Grownet</span>
+              </h1>
+              <p>{t("pendingRecord.modalEvidenceText")}</p>
+              <Link to="/record" className="bttn btn-primary">
+                {t("pendingRecord.modalButton")}
+              </Link>
+            </section>
+          </Modal>
+
+          {/* MODAL DE CIERRE DE ORDEN */}
           <Modal show={show} className="modal-dispute">
             <section className="alerta">
               <Icon
@@ -167,7 +306,6 @@ export default function PendingRecord() {
           <div className="menu-space"></div>
         </section>
       )}
-
       <MenuPrimary />
     </>
   );

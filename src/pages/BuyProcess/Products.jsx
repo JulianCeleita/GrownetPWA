@@ -20,7 +20,7 @@ export default function Products(props) {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [products, setProducts] = useState([]);
   const [articles, setArticles] = useState(products);
-  const { articlesToPay, selectedSupplier, selectedRestaurant } =
+  const { articlesToPay, selectedSupplier, selectedRestaurant, categories } =
     useOrderStore();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [resetInput, setResetInput] = useState(0);
@@ -94,6 +94,7 @@ export default function Products(props) {
       console.error("Error al obtener los productos del proveedor:", error);
     }
   };
+
   const fetchProductsByCategory = async (categoryId) => {
     if (categoryId === "All") {
       await fetchProducts(currentPage);
@@ -168,12 +169,14 @@ export default function Products(props) {
     }
   };
 
+
   useEffect(() => {
     const fetchData = async () => {
       if (articlesToPay.length > 0) {
         setArticles(articlesToPay);
 
         setProducts(articlesToPay);
+
       } else {
         await fetchProducts(currentPage);
       }
@@ -231,6 +234,7 @@ export default function Products(props) {
     setArticles(updatedArticlesToPay);
     useOrderStore.setState({ articlesToPay: updatedArticlesToPay });
   };
+
 
   const filterCategories = async (category, categoryId) => {
     setSelectedCategory(category);

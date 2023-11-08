@@ -16,7 +16,9 @@ export default function CategoriesMenu({
 }) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
+
   const { selectedSupplier } = useOrderStore();
+
 
   const { token } = useTokenStore();
   // Asumiendo que 'idsupplier' es una variable con el ID que deseas pasar
@@ -64,7 +66,9 @@ export default function CategoriesMenu({
           >
             <h6>All</h6>
           </button>
+
           {categories.map((categoryApi) => (
+
             <button
               type="button"
               className={`card-products ${

@@ -132,9 +132,6 @@ export default function Reception() {
             <Nav.Item>
               <Nav.Link eventKey="2">{t("reception.defective")}</Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link eventKey="3">{t("reception.other")}</Nav.Link>
-            </Nav.Item>
           </Nav>
           <Tab.Content>
             <Tab.Pane eventKey="1">
@@ -257,26 +254,6 @@ export default function Reception() {
                     {t("reception.customUpload")}
                   </label>
                 </div> */}
-                <button type="submit" className="bttn btn-primary">
-                  {t("reception.send")}
-                </button>
-              </form>
-            </Tab.Pane>
-            <Tab.Pane eventKey="3">
-              <form
-                className="wrong-reception"
-                onSubmit={handleSubmit}
-                controlid="kindOfStand"
-              >
-                <div className="wrong-product">
-                  <h3>{t("reception.addComent")}</h3>
-                  <textarea
-                    type="text"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                  ></textarea>
-                </div>
                 <button type="submit" className="bttn btn-primary">
                   {t("reception.send")}
                 </button>
