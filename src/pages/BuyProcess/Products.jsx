@@ -8,7 +8,7 @@ import Favorites from "../../components/Favorites";
 import ProductCard from "../../components/ProductDetail/ProductCard";
 import ProductSearcher from "../../components/ProductSearcher/ProductSearcher";
 import ProductsFind from "../../components/ProductSearcher/ProductsFind";
-import { supplierProducts } from "../../config/urls.config";
+import { supplierCategorie, supplierProducts } from "../../config/urls.config";
 import "../../css/products.css";
 import useOrderStore from "../../store/useOrderStore";
 import useTokenStore from "../../store/useTokenStore";
@@ -75,6 +75,7 @@ export default function Products(props) {
           )
         );
       useOrderStore.setState({ articlesToPay: productsWithTax });
+
       setArticles((prevProducts) => {
         const productIds = new Set(prevProducts.map((p) => p.id));
         const newProducts = productsWithTax.filter(
@@ -93,14 +94,93 @@ export default function Products(props) {
       console.error("Error al obtener los productos del proveedor:", error);
     }
   };
-  console.log("ARTICLES", articles);
+  const fetchProductsByCategory = async (categoryId) => {
+    if (categoryId === "All") {
+      await fetchProducts(currentPage);
+
+      return;
+    }
+    const requestBody = {
+      supplier: selectedSupplier.id,
+      categorie: categoryId,
+      country: countryCode,
+      accountNumber: selectedRestaurant.accountNumber,
+    };
+
+    try {
+      const response = await axios.post(supplierCategorie, requestBody, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const categorizedProducts = response.data.products;
+
+      const productsWithTax = categorizedProducts
+        .filter((product) => product.prices.some((price) => price.nameUoms))
+        .map((product) => {
+          const pricesWithTax = product.prices.map((price) => {
+            const priceWithTaxCalculation = (
+              price.price +
+              price.price * product.tax
+            ).toFixed(2);
+            return {
+              ...price,
+              priceWithTax:
+                isNaN(priceWithTaxCalculation) ||
+                parseFloat(priceWithTaxCalculation) === 0
+                  ? null
+                  : priceWithTaxCalculation,
+            };
+          });
+
+          return {
+            ...product,
+            amount: 0,
+            uomToPay: product.prices[0].nameUoms,
+            idUomToPay: product.prices[0].id,
+            prices: pricesWithTax,
+          };
+        })
+        .filter((product) =>
+          product.prices.some(
+            (price) => price.priceWithTax && parseFloat(price.priceWithTax) > 0
+          )
+        );
+      useOrderStore.setState({ articlesToPay: productsWithTax });
+
+      setArticles((prevProducts) => {
+        const productIds = new Set(prevProducts.map((p) => p.id));
+        const newProducts = productsWithTax.filter(
+          (p) => !productIds.has(p.id)
+        );
+        return [...prevProducts, ...newProducts];
+      });
+      setProducts((prevProducts) => {
+        const productIds = new Set(prevProducts.map((p) => p.id));
+        const newProducts = productsWithTax.filter(
+          (p) => !productIds.has(p.id)
+        );
+        return [...prevProducts, ...newProducts];
+      });
+    } catch (error) {
+      console.error("Error al obtener los productos por categoría:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchProducts(currentPage);
+      if (articlesToPay.length > 0) {
+        setArticles(articlesToPay);
+
+        setProducts(articlesToPay);
+      } else {
+        await fetchProducts(currentPage);
+      }
     };
 
     fetchData();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
@@ -152,16 +232,16 @@ export default function Products(props) {
     useOrderStore.setState({ articlesToPay: updatedArticlesToPay });
   };
 
-  // FILTRO
-  const productsCategory =
-    selectedCategory === "All"
-      ? ["All", ...new Set(articles.map((article) => article.nameCategorie))]
-      : ["All", selectedCategory];
-
-  const filterCategories = (category) => {
+  const filterCategories = async (category, categoryId) => {
     setSelectedCategory(category);
+
     setShowFavorites(false);
     resetInputSearcher();
+    try {
+      await fetchProductsByCategory(categoryId);
+    } catch (error) {
+      console.error("Error al obtener productos al mostrar categoría:", error);
+    }
   };
   //Filtro
   const [showProductSearch, setShowProductSearch] = useState(false);
@@ -191,6 +271,7 @@ export default function Products(props) {
         observer.unobserve(currentLoader);
       }
     };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -258,7 +339,6 @@ export default function Products(props) {
         <CategoriesMenu
           showFavorites={showFavorites}
           toggleShowFavorites={toggleShowFavorites}
-          categoriesProduct={productsCategory}
           filterCategory={filterCategories}
           selectedCategory={selectedCategory}
         />

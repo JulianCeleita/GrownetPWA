@@ -6,24 +6,24 @@ import { Link } from "react-router-dom";
 import { allCategories } from "../../config/urls.config";
 import useTokenStore from "../../store/useTokenStore";
 import "./categoriesMenu.css";
+import useOrderStore from "../../store/useOrderStore";
 
 export default function CategoriesMenu({
   showFavorites,
   toggleShowFavorites,
-  categoriesProduct,
   filterCategory,
   selectedCategory,
 }) {
   const { t } = useTranslation();
-  const [categories, setCategories] = useState();
-
-  const urlImg =
-    "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/";
+  const [categories, setCategories] = useState([]);
+  const { selectedSupplier } = useOrderStore();
 
   const { token } = useTokenStore();
+  // Asumiendo que 'idsupplier' es una variable con el ID que deseas pasar
+
   useEffect(() => {
     axios
-      .get(allCategories, {
+      .get(`${allCategories}?supplier_id=${selectedSupplier.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,8 +34,9 @@ export default function CategoriesMenu({
       .catch((error) => {
         console.error("Error al obtener los datos de la API:", error);
       });
-  }, []);
-
+  }, [selectedSupplier, token]);
+  console.log("categories:", categories);
+  console.log("token:", token);
   return (
     <section className="menu-categories me-auto">
       <div className="contenido">
@@ -52,19 +53,29 @@ export default function CategoriesMenu({
                 : t("categoriesMenu.favorites")}
             </h6>
           </button>
-
-          {categoriesProduct.map((category) => (
+          <button
+            type="button"
+            className={`card-products ${
+              selectedCategory === "All" && !showFavorites
+                ? "activeCategory"
+                : "inactiveCategory"
+            }`}
+            onClick={() => filterCategory("All", "All")}
+          >
+            <h6>All</h6>
+          </button>
+          {categories.map((categoryApi) => (
             <button
               type="button"
               className={`card-products ${
-                selectedCategory === category && !showFavorites
+                selectedCategory === categoryApi.name && !showFavorites
                   ? "activeCategory"
                   : "inactiveCategory"
               }`}
-              key={category}
-              onClick={() => filterCategory(category)}
+              key={categoryApi.id}
+              onClick={() => filterCategory(categoryApi.name, categoryApi.id)}
             >
-              <h6>{category}</h6>
+              <h6>{categoryApi.name}</h6>
             </button>
           ))}
         </div>
