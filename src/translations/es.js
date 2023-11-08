@@ -107,7 +107,13 @@ const esTranslations = {
     modalText:
       "Para ver tus pedidos confirmados, ve a 'Pedidos anteriores' en 'Historial'.",
     modalButton: "Continuar",
-    modalEvidenceText:"La disputa será revisada por uno de nuestros agentes y te responderemos lo antes posible."
+    modalEvidenceText:"La disputa será revisada por uno de nuestros agentes y te responderemos lo antes posible.",
+    warningTitle: "Tienes una disputa abierta",
+    warningFirstPart: "Confirmando la orden",
+    warningSecondPart: "se cerrará la disputa",
+    warningThirdPart: "y confirmas que todo se resolvió.",
+    warningConfirm: "Confirmar orden",
+    warningCancel: "Cancelar",
   },
   reception: {
     title: "¿Qué salió mal?",

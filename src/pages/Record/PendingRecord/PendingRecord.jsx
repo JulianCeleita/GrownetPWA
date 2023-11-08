@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Form, Tab, Tabs } from "react-bootstrap";
+import { Tab, Tabs } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -24,8 +24,11 @@ export default function PendingRecord() {
   const [buttonEvidence, setButtonEvidence] = useState("upload");
   const [showEvidencesModal, setShowEvidencesModal] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState({});
+  const [showWarningModal, setShowWarningModal] = useState(false);
   const { selectedPendingOrder, detailsToShow, setDetailsToShow } =
     useRecordStore();
+
+  console.log(detailsToShow.id_stateOrders, "hola");
 
   useEffect(() => {
     if (evidences.length === 0) {
@@ -46,6 +49,7 @@ export default function PendingRecord() {
       .catch((error) => {
         console.log(error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFilesChange = (e) => {
@@ -56,28 +60,6 @@ export default function PendingRecord() {
     const fileArray = Array.from(e.target.files);
     setEvidences(fileArray);
     setButtonEvidence("submit");
-  };
-
-  // CERRAR LA ORDEN SELECCIONADA
-  const onCloseOrder = (e) => {
-    setShow(true);
-    e.preventDefault();
-    const bodyCloseOrder = {
-      reference: selectedPendingOrder,
-      state: 5,
-    };
-    axios
-      .post(closeSelectedOrder, bodyCloseOrder, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log("Error al cerrar la orden", error);
-      });
   };
 
   // ENVIAR EVIDENCIAS
@@ -121,6 +103,39 @@ export default function PendingRecord() {
       ...prevSelectedProducts,
       [productId]: !prevSelectedProducts[productId],
     }));
+  };
+
+  // CERRAR LA ORDEN SELECCIONADA
+  const handleClose = () => setShowWarningModal(false);
+
+  const onConfirmOrder = (e) => {
+    e.preventDefault();
+    if (detailsToShow.id_stateOrders === 6) {
+      setShowWarningModal(true);
+    } else {
+      onCloseOrder(e);
+    }
+  };
+
+  const onCloseOrder = (e) => {
+    setShow(true);
+    e.preventDefault();
+    const bodyCloseOrder = {
+      reference: selectedPendingOrder,
+      state: 5,
+    };
+    axios
+      .post(closeSelectedOrder, bodyCloseOrder, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log("Error al cerrar la orden", error);
+      });
   };
 
   return (
@@ -184,9 +199,12 @@ export default function PendingRecord() {
                 <form className="card-pending-record">
                   <h1>{t("pendingRecord.check")}</h1>
                   {detailsToShow.products?.map((product) => (
-                    <div className={`product-check ${selectedProducts[product.id] ? 'selected' : ''}`} 
-                    key={product.id}
-                    onClick={() => toggleProductSelection(product.id)}
+                    <div
+                      className={`product-check ${
+                        selectedProducts[product.id] ? "selected" : ""
+                      }`}
+                      key={product.id}
+                      onClick={() => toggleProductSelection(product.id)}
                     >
                       <div className="product-detail" id="check-products">
                         <div>
@@ -197,16 +215,18 @@ export default function PendingRecord() {
                           >
                             {t("pendingRecord.openDispute")}
                           </Link>
-                          
                         </div>
                         <div className="calification-reception">
-                        <p>
+                          <p>
                             {product.quantity} {product.uom}
                           </p>
                         </div>
                       </div>
                     </div>
                   ))}
+
+                  {/* ADJUNTAR EVIDENCIAS */}
+
                   <div className="uploaded-images">
                     {evidences.map((file, index) => (
                       <div key={index} className="image-preview">
@@ -255,7 +275,7 @@ export default function PendingRecord() {
                   )}
                   <button
                     className="bttn btn-primary"
-                    onClick={(e) => onCloseOrder(e)}
+                    onClick={(e) => onConfirmOrder(e)}
                   >
                     {t("pendingRecord.confirmOrder")}
                   </button>
@@ -287,6 +307,37 @@ export default function PendingRecord() {
           </Modal>
 
           {/* MODAL DE CIERRE DE ORDEN */}
+
+          <Modal show={showWarningModal} className="modal-dispute">
+            <section className="alerta">
+              <Icon className="error" icon="pajamas:error" />
+              <h1> {t("pendingRecord.warningTitle")} </h1>
+              <p>
+                {t("pendingRecord.warningFirstPart")}{" "}
+                <span id="number-phone">
+                  {t("pendingRecord.warningSecondPart")}{" "}
+                </span>
+                {t("pendingRecord.warningThirdPart")}
+              </p>
+              <div id="modal-dispute-error">
+                <button
+                  className="bttn btn-primary"
+                  onClick={onCloseOrder}
+                  id="button-modal-close"
+                >
+                  {t("pendingRecord.warningConfirm")}
+                </button>
+                <button
+                  className="bttn btn-outline"
+                  onClick={handleClose}
+                  id="close"
+                >
+                  {t("pendingRecord.warningCancel")}
+                </button>
+              </div>
+            </section>
+          </Modal>
+
           <Modal show={show} className="modal-dispute">
             <section className="alerta">
               <Icon
