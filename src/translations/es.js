@@ -96,7 +96,7 @@ const esTranslations = {
     tabProducts: "Productos",
     tabReception: "Recepción",
     check: "Verifica tus productos",
-    openDispute: "Abrir disputa",
+    openDispute: "Disputa",
     confirmOrder: "Confirmar pedido",
     supplierDetail: "Detalles del proveedor",
     detailsItem: "Detalles de los productos",
