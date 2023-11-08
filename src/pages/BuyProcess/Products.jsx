@@ -169,17 +169,13 @@ export default function Products(props) {
     }
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       if (articlesToPay.length > 0) {
         setArticles(articlesToPay);
-
         setProducts(articlesToPay);
-
-      } else {
-        await fetchProducts(currentPage);
       }
+      await fetchProducts(currentPage);
     };
 
     fetchData();
@@ -234,7 +230,6 @@ export default function Products(props) {
     setArticles(updatedArticlesToPay);
     useOrderStore.setState({ articlesToPay: updatedArticlesToPay });
   };
-
 
   const filterCategories = async (category, categoryId) => {
     setSelectedCategory(category);
