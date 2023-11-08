@@ -20,7 +20,7 @@ export default function Products(props) {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [products, setProducts] = useState([]);
   const [articles, setArticles] = useState(products);
-  const { articlesToPay, selectedSupplier, selectedRestaurant, categories } =
+  const { articlesToPay, selectedSupplier, selectedRestaurant } =
     useOrderStore();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [resetInput, setResetInput] = useState(0);
