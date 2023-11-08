@@ -19,13 +19,12 @@ export default function CategoriesMenu({
 
   const { selectedSupplier } = useOrderStore();
 
-
   const { token } = useTokenStore();
   // Asumiendo que 'idsupplier' es una variable con el ID que deseas pasar
 
   useEffect(() => {
     axios
-      .get(`${allCategories}?supplier_id=${selectedSupplier.id}`, {
+      .get(`${allCategories}${selectedSupplier.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -37,8 +36,7 @@ export default function CategoriesMenu({
         console.error("Error al obtener los datos de la API:", error);
       });
   }, [selectedSupplier, token]);
-  console.log("categories:", categories);
-  console.log("token:", token);
+
   return (
     <section className="menu-categories me-auto">
       <div className="contenido">
@@ -68,7 +66,6 @@ export default function CategoriesMenu({
           </button>
 
           {categories.map((categoryApi) => (
-
             <button
               type="button"
               className={`card-products ${
