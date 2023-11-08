@@ -121,6 +121,12 @@
   .product-check.selected p {
     color: white;
   }
+  #modal-dispute-error{
+    margin-top: 8px;
+  }
+  #button-modal-close{
+    margin-right: 10px;
+  }
 @media screen and (min-width: 800px) {
     .pending-record .tittle-page{
         position: relative;

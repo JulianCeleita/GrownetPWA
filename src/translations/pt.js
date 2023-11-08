@@ -107,7 +107,13 @@ const ptTranslations = {
     modalText:
       "Para ver seus pedidos confirmados, acesse 'Pedidos antigos' em 'Registro'.",
     modalButton: "Continuar",
-    modalEvidenceText:"A disputa será analisada por um de nossos agentes e responderemos o mais breve possível."
+    modalEvidenceText:"A disputa será analisada por um de nossos agentes e responderemos o mais breve possível.",
+    warningTitle: "Você tem uma disputa aberta",
+    warningFirstPart: "Confirmando o pedido",
+    warningSecondPart: "a disputa será encerrada",
+    warningThirdPart: "e confirme se tudo está resolvido.",
+    warningConfirm: "Confirmar pedido",
+    warningCancel: "Cancelar",
   },
   reception: {
     title: "O que deu errado?",
