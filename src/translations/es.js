@@ -107,6 +107,7 @@ const esTranslations = {
     modalText:
       "Para ver tus pedidos confirmados, ve a 'Pedidos anteriores' en 'Historial'.",
     modalButton: "Continuar",
+    modalEvidenceText:"La disputa será revisada por uno de nuestros agentes y te responderemos lo antes posible."
   },
   reception: {
     title: "¿Qué salió mal?",
@@ -118,11 +119,12 @@ const esTranslations = {
     crediteNote: "Nota de crédito",
     send: "Enviar",
     defectiveQuantity: "Ingresa la cantidad defectuosa:",
-    attachPhoto: "Adjuntar foto:",
-    customUpload: "Carga personalizada",
+    attachPhoto: "Adjuntar foto",
+    customUpload: "Agregar evidencia",
     modalTittle: "Disputa creada exitosamente",
     modalText: "Nuestro equipo verificará la información",
     modalButton: "Continuar",
+    submitEvidence: "Enviar evidencia",
   },
   settings: {
     title: "Configuración",

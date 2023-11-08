@@ -107,6 +107,7 @@ const enTranslations = {
     modalText:
       "To view your confirmed orders, go to 'Past orders' under 'Record'.",
     modalButton: "Continue",
+    modalEvidenceText: "The dispute will be reviewed by one of our agents and we will respond to you as soon as possible."
   },
   reception: {
     title: "What went wrong?",
@@ -118,11 +119,12 @@ const enTranslations = {
     crediteNote: "Credit note",
     send: "Send",
     defectiveQuantity: "Enter defective quantity:",
-    attachPhoto: "Attach photo:",
-    customUpload: "Custom Upload",
+    attachPhoto: "Attach photo",
+    customUpload: "Add evidence",
     modalTittle: "Successfully created dispute",
     modalText: "Our team will verify the information",
     modalButton: "Continue",
+    submitEvidence: "Submit evidence",
   },
   settings: {
     title: "Settings",

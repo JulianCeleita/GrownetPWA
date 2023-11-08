@@ -107,6 +107,7 @@ const ptTranslations = {
     modalText:
       "Para ver seus pedidos confirmados, acesse 'Pedidos antigos' em 'Registro'.",
     modalButton: "Continuar",
+    modalEvidenceText:"A disputa será analisada por um de nossos agentes e responderemos o mais breve possível."
   },
   reception: {
     title: "O que deu errado?",
@@ -118,11 +119,12 @@ const ptTranslations = {
     crediteNote: "Nota de crédito",
     send: "Enviar",
     defectiveQuantity: "Digite a quantidade defeituosa:",
-    attachPhoto: "Anexar foto:",
-    customUpload: "Upload personalizado",
+    attachPhoto: "Anexar foto",
+    customUpload: "Adicionar evidências",
     modalTittle: "Disputa criada com sucesso",
     modalText: "Nossa equipe verificará as informações",
     modalButton: "Continuar",
+    submitEvidence: "Enviar evidência",
   },
   settings: {
     title: "Configurações",
