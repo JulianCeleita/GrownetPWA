@@ -86,7 +86,7 @@ export default function PendingRecord() {
 
     const disputeBody = {
       order: selectedPendingOrder,
-      evidence_id: detailsToShow.evidences_id,
+      product_id: detailsToShow.evidences_id,
     };
     for (let key in disputeBody) {
       if (disputeBody.hasOwnProperty(key)) {
