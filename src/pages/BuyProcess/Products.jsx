@@ -20,7 +20,7 @@ export default function Products(props) {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [products, setProducts] = useState([]);
   const [articles, setArticles] = useState(products);
-  const { articlesToPay, selectedSupplier, selectedRestaurant, categories } =
+  const { articlesToPay, selectedSupplier, selectedRestaurant } =
     useOrderStore();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [resetInput, setResetInput] = useState(0);
@@ -149,6 +149,7 @@ export default function Products(props) {
             (price) => price.priceWithTax && parseFloat(price.priceWithTax) > 0
           )
         );
+
       useOrderStore.setState({ articlesToPay: productsWithTax });
 
       setArticles((prevProducts) => {
@@ -192,12 +193,6 @@ export default function Products(props) {
     setShowFavorites(!showFavorites);
     setSelectedCategory("All");
     resetInputSearcher();
-
-    try {
-      await fetchProducts();
-    } catch (error) {
-      console.error("Error al obtener productos al mostrar favoritos:", error);
-    }
   };
   // CAMBIO DE CANTIDAD DE ARTICULOS
   const handleAmountChange = (productId, newAmount) => {
@@ -306,7 +301,6 @@ export default function Products(props) {
             <Favorites
               onAmountChange={handleAmountChange}
               onUomChange={handleUomChange}
-              fetchFavorites={fetchProducts}
               opacity
             />
           ) : (
