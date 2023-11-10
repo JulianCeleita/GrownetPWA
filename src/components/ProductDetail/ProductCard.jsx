@@ -13,7 +13,7 @@ export default function ProductCard({
   productData,
   onAmountChange,
   onUomChange,
-  fetchFavorites,
+
   opacity,
 }) {
   const counter = 0;
@@ -67,8 +67,6 @@ export default function ProductCard({
       }));
 
       console.log("Toggle favorite response:", response.data);
-
-      await fetchFavorites();
     } catch (error) {
       setProductState((prevState) => ({
         ...prevState,
@@ -80,7 +78,6 @@ export default function ProductCard({
       console.error("Error al gestionar el favorito:", error);
     }
   }, [
-    fetchFavorites,
     productData,
     productState.isFavorite,
     productState.isFavoritePending,

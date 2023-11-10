@@ -37,6 +37,8 @@ export const selectedStorageOrder =
 //FAVORITES
 export const addFavorite =
   "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/products/favorite";
+export const favoritesBySupplier =
+  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/products/favoritesBySupplier";
 
 // DISPUTES
 export const createDisputeOrder =

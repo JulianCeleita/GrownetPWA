@@ -148,6 +148,7 @@ export default function Products(props) {
             (price) => price.priceWithTax && parseFloat(price.priceWithTax) > 0
           )
         );
+
       useOrderStore.setState({ articlesToPay: productsWithTax });
 
       setArticles((prevProducts) => {
@@ -191,12 +192,6 @@ export default function Products(props) {
     setShowFavorites(!showFavorites);
     setSelectedCategory("All");
     resetInputSearcher();
-
-    try {
-      await fetchProducts();
-    } catch (error) {
-      console.error("Error al obtener productos al mostrar favoritos:", error);
-    }
   };
   // CAMBIO DE CANTIDAD DE ARTICULOS
   const handleAmountChange = (productId, newAmount) => {
@@ -303,7 +298,6 @@ export default function Products(props) {
             <Favorites
               onAmountChange={handleAmountChange}
               onUomChange={handleUomChange}
-              fetchFavorites={fetchProducts}
               opacity
             />
           ) : (
