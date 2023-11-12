@@ -13,8 +13,10 @@ export default function ProductCard({
   productData,
   onAmountChange,
   onUomChange,
-
   opacity,
+  reloadFavorites,
+  fetchProducts,
+  currentPage,
 }) {
   const counter = 0;
   const { id, name, image, prices, uomToPay, active } = productData;
@@ -77,6 +79,12 @@ export default function ProductCard({
 
       console.error("Error al gestionar el favorito:", error);
     }
+    if (opacity) {
+      await reloadFavorites();
+    } else {
+      await fetchProducts(currentPage);
+      console.log("currentPage:", currentPage);
+    }
   }, [
     productData,
     productState.isFavorite,
@@ -84,6 +92,9 @@ export default function ProductCard({
     selectedRestaurant.accountNumber,
     selectedSupplier.id,
     token,
+    reloadFavorites,
+    fetchProducts,
+    currentPage,
   ]);
 
   const handleUomToPayChange = (event) => {
