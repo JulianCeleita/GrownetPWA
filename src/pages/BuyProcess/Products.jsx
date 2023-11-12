@@ -26,8 +26,6 @@ export default function Products(props) {
   const [resetInput, setResetInput] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const loader = useRef(null);
-  const [loading, setLoading] = useState(false);
-
   const fetchProducts = async (page = 0) => {
     const requestBody = {
       id: selectedSupplier.id,
@@ -42,6 +40,7 @@ export default function Products(props) {
           Authorization: `Bearer ${token}`,
         },
       });
+
       const defaultProducts = response.data.products;
 
       const productsWithTax = defaultProducts
@@ -75,22 +74,16 @@ export default function Products(props) {
             (price) => price.priceWithTax && parseFloat(price.priceWithTax) > 0
           )
         );
-      useOrderStore.setState({ articlesToPay: productsWithTax });
 
-      setArticles((prevProducts) => {
-        const productIds = new Set(prevProducts.map((p) => p.id));
-        const newProducts = productsWithTax.filter(
-          (p) => !productIds.has(p.id)
-        );
-        return [...prevProducts, ...newProducts];
-      });
-      setProducts((prevProducts) => {
-        const productIds = new Set(prevProducts.map((p) => p.id));
-        const newProducts = productsWithTax.filter(
-          (p) => !productIds.has(p.id)
-        );
-        return [...prevProducts, ...newProducts];
-      });
+      // Filtrar productos para asegurar IDs únicos
+      const uniqueProducts = Array.from(
+        new Set(productsWithTax.map((product) => product.id))
+      ).map((id) => productsWithTax.find((product) => product.id === id));
+
+      useOrderStore.setState({ articlesToPay: uniqueProducts });
+
+      setArticles(uniqueProducts);
+      setProducts(uniqueProducts);
     } catch (error) {
       console.error("Error al obtener los productos del proveedor:", error);
     }
@@ -150,22 +143,14 @@ export default function Products(props) {
           )
         );
 
-      useOrderStore.setState({ articlesToPay: productsWithTax });
+      const uniqueProducts = Array.from(
+        new Set(productsWithTax.map((product) => product.id))
+      ).map((id) => productsWithTax.find((product) => product.id === id));
 
-      setArticles((prevProducts) => {
-        const productIds = new Set(prevProducts.map((p) => p.id));
-        const newProducts = productsWithTax.filter(
-          (p) => !productIds.has(p.id)
-        );
-        return [...prevProducts, ...newProducts];
-      });
-      setProducts((prevProducts) => {
-        const productIds = new Set(prevProducts.map((p) => p.id));
-        const newProducts = productsWithTax.filter(
-          (p) => !productIds.has(p.id)
-        );
-        return [...prevProducts, ...newProducts];
-      });
+      useOrderStore.setState({ articlesToPay: uniqueProducts });
+
+      setArticles(uniqueProducts);
+      setProducts(uniqueProducts);
     } catch (error) {
       console.error("Error al obtener los productos por categoría:", error);
     }
@@ -176,14 +161,15 @@ export default function Products(props) {
       if (articlesToPay.length > 0) {
         setArticles(articlesToPay);
         setProducts(articlesToPay);
+      } else {
+        await fetchProducts(currentPage);
       }
-      await fetchProducts(currentPage);
     };
-
+    console.log("articlesToPay:", articlesToPay);
     fetchData();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  }, [currentPage, articlesToPay]);
 
   const resetInputSearcher = () => {
     setResetInput((prevKey) => prevKey + 1);
@@ -191,8 +177,13 @@ export default function Products(props) {
 
   const toggleShowFavorites = async () => {
     setShowFavorites(!showFavorites);
-    setSelectedCategory("All");
+
     resetInputSearcher();
+    try {
+      await fetchProducts(currentPage);
+    } catch (error) {
+      console.error("Error al obtener productos al mostrar favoritos:", error);
+    }
   };
   // CAMBIO DE CANTIDAD DE ARTICULOS
   const handleAmountChange = (productId, newAmount) => {
@@ -229,7 +220,6 @@ export default function Products(props) {
 
   const filterCategories = async (category, categoryId) => {
     setSelectedCategory(category);
-
     setShowFavorites(false);
     resetInputSearcher();
     try {
@@ -244,33 +234,31 @@ export default function Products(props) {
   const toggleProductSearch = () => {
     setShowProductSearch(!showProductSearch);
   };
-
   // PAGINATION
-  useEffect(() => {
-    const currentLoader = loader.current;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          setLoading(true);
-          setCurrentPage((prevPage) => prevPage + 1);
-          const timer = setTimeout(() => {
-            setLoading(false);
-          }, 3000);
-          return () => clearTimeout(timer);
-        }
-      },
-      { threshold: 1.0 }
-    );
-    if (loader.current) {
-      observer.observe(loader.current);
-    }
-    return () => {
-      if (currentLoader) {
-        observer.unobserve(currentLoader);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+
+  // useEffect(() => {
+  //   const currentLoader = loader.current;
+  //   const observer = new IntersectionObserver(
+  //     (entries) => {
+  //       if (entries[0].isIntersecting) {
+  //         setCurrentPage((prevPage) => prevPage + 1);
+  //       }
+  //     },
+  //     { threshold: 1.0 }
+  //   );
+
+  //   if (loader.current) {
+  //     observer.observe(loader.current);
+  //   }
+
+  //   return () => {
+  //     if (currentLoader) {
+  //       observer.unobserve(currentLoader);
+  //     }
+  //   };
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <section className="products">
@@ -319,20 +307,18 @@ export default function Products(props) {
                       productData={article}
                       onAmountChange={handleAmountChange}
                       onUomChange={handleUomChange}
-                      fetchFavorites={fetchProducts}
+                      fetchProducts={fetchProducts}
+                      currentPage={currentPage}
                     ></ProductCard>
                   </section>
                 ))}
             </>
           )}
         </>
-      )}{loading && (
-        <div className="loader-container">
-          <div className="loader"></div>
-        </div>
       )}
-      <div ref={loader} className="loader-container">
-      </div>
+      {/* <div ref={loader} className="loader-container">
+        <div className="loader"></div>
+      </div> */}
       <div className="space-CatgMenu"></div>
       {
         <CategoriesMenu

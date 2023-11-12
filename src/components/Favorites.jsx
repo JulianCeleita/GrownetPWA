@@ -12,88 +12,94 @@ export default function Favorites({ onAmountChange, onUomChange }) {
   const [favorites, setFavorites] = useState([]);
   const { token } = useTokenStore();
 
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      const requestBody = {
-        supplier_id: selectedSupplier.id,
-      };
+  const fetchFavorites = async () => {
+    const requestBody = {
+      supplier_id: selectedSupplier.id,
+    };
 
-      try {
-        const response = await axios.post(favoritesBySupplier, requestBody, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    try {
+      const response = await axios.post(favoritesBySupplier, requestBody, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        const defaultFavorites = response.data.favorites;
+      const defaultFavorites = response.data.favorites;
 
-        const productsWithTax = defaultFavorites
-          .filter((product) => product.prices.some((price) => price.nameUoms))
-          .map((product) => {
-            const pricesWithTax = product.prices.map((price) => {
-              const priceWithTaxCalculation = (
-                price.price +
-                price.price * product.tax
-              ).toFixed(2);
-
-              return {
-                ...price,
-                priceWithTax:
-                  isNaN(priceWithTaxCalculation) ||
-                  parseFloat(priceWithTaxCalculation) === 0
-                    ? null
-                    : priceWithTaxCalculation,
-              };
-            });
+      const productsWithTax = defaultFavorites
+        .filter((product) => product.prices.some((price) => price.nameUoms))
+        .map((product) => {
+          const pricesWithTax = product.prices.map((price) => {
+            const priceWithTaxCalculation = (
+              price.price +
+              price.price * product.tax
+            ).toFixed(2);
 
             return {
-              ...product,
-              amount: 0,
-              uomToPay: product.prices[0].nameUoms,
-              idUomToPay: product.prices[0].id,
-              prices: pricesWithTax,
+              ...price,
+              priceWithTax:
+                isNaN(priceWithTaxCalculation) ||
+                parseFloat(priceWithTaxCalculation) === 0
+                  ? null
+                  : priceWithTaxCalculation,
             };
-          })
-
-          .filter((product) => {
-            const isValidProduct = product.prices.some(
-              (price) =>
-                price.priceWithTax && parseFloat(price.priceWithTax) > 0
-            );
-
-            return isValidProduct;
           });
 
-        useOrderStore.setState({ articlesToPay: productsWithTax });
+          return {
+            ...product,
+            amount: 0,
+            uomToPay: product.prices[0].nameUoms,
+            idUomToPay: product.prices[0].id,
+            prices: pricesWithTax,
+          };
+        })
 
-        setFavorites(productsWithTax);
+        .filter((product) => {
+          const isValidProduct = product.prices.some(
+            (price) => price.priceWithTax && parseFloat(price.priceWithTax) > 0
+          );
+
+          return isValidProduct;
+        });
+      const uniqueProducts = Array.from(
+        new Set(productsWithTax.map((product) => product.id))
+      ).map((id) => productsWithTax.find((product) => product.id === id));
+
+      useOrderStore.setState({ articlesToPay: uniqueProducts });
+
+      setFavorites(uniqueProducts);
+    } catch (error) {
+      console.error("Error al obtener los productos del proveedor:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchFavorites();
       } catch (error) {
-        console.error("Error al obtener los productos del proveedor:", error);
+        console.error("Error al obtener los favoritos del proveedor:", error);
       }
     };
 
-    fetchFavorites();
+    fetchData();
   }, [selectedSupplier, token]);
-
-  const filteredFavorites = favorites.filter(
-    (product, index, self) =>
-      self.findIndex((p) => p.id === product.id) === index
-  );
-
+  console.log("Efavorites:", favorites);
   return (
     <div className="products">
       <p>
-        {t("favorites.findFirstPart")} {filteredFavorites.length}{" "}
+        {t("favorites.findFirstPart")} {favorites.length}{" "}
         {t("favorites.findSecondPart")}{" "}
       </p>
       <div className="favorite-items">
-        {filteredFavorites.map((product) => (
+        {favorites.map((product) => (
           <ProductCard
             key={product.id}
             productData={product}
             onAmountChange={onAmountChange}
             onUomChange={onUomChange}
             opacity
+            reloadFavorites={fetchFavorites}
           />
         ))}
       </div>
