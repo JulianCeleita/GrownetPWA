@@ -2,44 +2,44 @@ export const registerApiUrl = "http://localhost:5000/register";
 
 // AUTHENTICATION
 export const otpApiUrl =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/authenticate/login";
+  "https://api.grownetapp.com/grownet/public/api/authenticate/login";
 export const validationApiUrl =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/authenticate/validateTelephone";
+  "https://api.grownetapp.com/grownet/public/api/authenticate/validateTelephone";
 export const onlyCountries =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/countries/all";
+  "https://api.grownetapp.com/grownet/public/api/countries/all";
 
 // RESTAURANTS
 export const availableRestaurants =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/customers/chef";
+  "https://api.grownetapp.com/grownet/public/api/customers/chef";
 export const availableSuppliers =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/suppliers/customer";
+  "https://api.grownetapp.com/grownet/public/api/suppliers/customer";
 
 // CATEGORIES
 export const allCategories =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/categories/supplier/";
+  "https://api.grownetapp.com/grownet/public/api/categories/supplier/";
 export const selectedCategory =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/categoriesProducts/products/{id}";
+  "https://api.grownetapp.com/grownet/public/api/categoriesProducts/products/{id}";
 export const supplierCategorie =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/products/supplierCategorie";
+  "https://api.grownetapp.com/grownet/public/api/products/supplierCategorie";
 
 // PRODUCTS
 export const supplierProducts =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/products/supplier";
+  "https://api.grownetapp.com/grownet/public/api/products/supplier";
 
 // ORDERS RECORD
 export const createStorageOrder =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/orders/create";
+  "https://api.grownetapp.com/grownet/public/api/orders/create";
 export const allStorageOrders =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/orders/chef/";
+  "https://api.grownetapp.com/grownet/public/api/orders/chef/";
 export const selectedStorageOrder =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/orders";
+  "https://api.grownetapp.com/grownet/public/api/orders";
 
 //FAVORITES
 export const addFavorite =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/products/favorite";
+  "https://api.grownetapp.com/grownet/public/api/products/favorite";
 
 // DISPUTES
 export const createDisputeOrder =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/disputeOrder/create";
+  "https://api.grownetapp.com/grownet/public/api/disputeOrder/create";
 export const closeSelectedOrder =
-  "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/api/orders/state";
+  "https://api.grownetapp.com/grownet/public/api/orders/state";
