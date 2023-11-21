@@ -37,7 +37,9 @@ export const selectedStorageOrder =
 //FAVORITES
 export const addFavorite =
   "https://api.grownetapp.com/grownet/public/api/products/favorite";
-
+export const favoritesBySupplier =
+  "https://api.grownetapp.com/grownet/public/api/products/favoritesBySupplier";
+  
 // DISPUTES
 export const createDisputeOrder =
   "https://api.grownetapp.com/grownet/public/api/disputeOrder/create";

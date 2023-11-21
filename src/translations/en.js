@@ -90,6 +90,7 @@ const enTranslations = {
     noOrders: "No orders yet",
     bttnNoOrders: "Order now",
     noOrdersDate: "No orders on this date",
+    openDispute: "Open dispute",
   },
   pendingRecord: {
     title: "Order details",
@@ -107,7 +108,8 @@ const enTranslations = {
     modalText:
       "To view your confirmed orders, go to 'Past orders' under 'Record'.",
     modalButton: "Continue",
-    modalEvidenceText: "The dispute will be reviewed by one of our agents and we will respond to you as soon as possible.",
+    modalEvidenceText:
+      "The dispute will be reviewed by one of our agents and we will respond to you as soon as possible.",
     warningTitle: "It has an open dispute",
     warningFirstPart: "By confirming the order",
     warningSecondPart: "the dispute will be closed",

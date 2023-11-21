@@ -170,7 +170,9 @@ export default function Record() {
                                   id="dispute-icon"
                                   icon="pajamas:warning"
                                 />
-                                <p id="dispute-text">Open dispute</p>
+                                <p id="dispute-text">
+                                  {t("record.openDispute")}
+                                </p>
                               </div>
                             )}
                           </div>
