@@ -135,7 +135,6 @@ useEffect(() => {
       setArticles([]);
       setCurrentPage(0);
       await fetchProducts(currentPage);
-
       return;
     }
     setCurrentPage(0);
@@ -187,14 +186,21 @@ useEffect(() => {
           )
         );
 
-      const uniqueProducts = Array.from(
-        new Set(productsWithTax.map((product) => product.id))
-      ).map((id) => productsWithTax.find((product) => product.id === id));
+      const updatedArticlesToPay = [
+        ...articlesToPay,
+        ...productsWithTax,
+      ].filter(
+        (product, index, self) =>
+          index ===
+          self.findIndex(
+            (p) => p.id === product.id && p.uomToPay === product.uomToPay
+          )
+      );
 
-      useOrderStore.setState({ articlesToPay: uniqueProducts });
+      useOrderStore.setState({ articlesToPay: updatedArticlesToPay });
 
-      setArticles(uniqueProducts);
-      setProducts(uniqueProducts);
+      setArticles(updatedArticlesToPay);
+      setProducts(updatedArticlesToPay);
       setLoading(false);
     } catch (error) {
       console.error("Error al obtener los productos por categoría:", error);
