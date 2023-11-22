@@ -12,8 +12,6 @@ import { supplierCategorie, supplierProducts } from "../../config/urls.config";
 import "../../css/products.css";
 import useOrderStore from "../../store/useOrderStore";
 import useTokenStore from "../../store/useTokenStore";
-import { set } from "date-fns";
-import { use } from "i18next";
 
 export default function Products(props) {
   const { t } = useTranslation();

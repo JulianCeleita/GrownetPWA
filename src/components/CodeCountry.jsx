@@ -3,7 +3,7 @@ export default function CodeCountry() {
     const [code, setCode] = useState([]);
 
         useEffect (() => {
-            fetch ("https://api.grownetapp.com/grownet/public/api/countries/all")
+            fetch ("https://api.grownetapp.com/grownet/api/countries/all")
             .then ((response) => response.json ())
             .then (( {countries}) => setCode(countries));
         }, [ ]);
