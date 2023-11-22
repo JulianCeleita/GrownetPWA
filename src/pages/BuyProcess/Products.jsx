@@ -26,6 +26,7 @@ export default function Products(props) {
   const [resetInput, setResetInput] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const loader = useRef(null);
+
   const fetchProducts = async (page = 0) => {
     const requestBody = {
       id: selectedSupplier.id,
@@ -88,13 +89,12 @@ export default function Products(props) {
       console.error("Error al obtener los productos del proveedor:", error);
     }
   };
-
   const fetchProductsByCategory = async (categoryId) => {
     if (categoryId === "All") {
       await fetchProducts(currentPage);
-
       return;
     }
+
     const requestBody = {
       supplier: selectedSupplier.id,
       categorie: categoryId,
@@ -143,14 +143,21 @@ export default function Products(props) {
           )
         );
 
-      const uniqueProducts = Array.from(
-        new Set(productsWithTax.map((product) => product.id))
-      ).map((id) => productsWithTax.find((product) => product.id === id));
+      const updatedArticlesToPay = [
+        ...articlesToPay,
+        ...productsWithTax,
+      ].filter(
+        (product, index, self) =>
+          index ===
+          self.findIndex(
+            (p) => p.id === product.id && p.uomToPay === product.uomToPay
+          )
+      );
 
-      useOrderStore.setState({ articlesToPay: uniqueProducts });
+      useOrderStore.setState({ articlesToPay: updatedArticlesToPay });
 
-      setArticles(uniqueProducts);
-      setProducts(uniqueProducts);
+      setArticles(updatedArticlesToPay);
+      setProducts(updatedArticlesToPay);
     } catch (error) {
       console.error("Error al obtener los productos por categoría:", error);
     }
