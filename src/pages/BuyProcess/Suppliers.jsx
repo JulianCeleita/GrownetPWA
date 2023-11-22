@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import CardSuppliers from "../../components/CardSuppliers.jsx";
@@ -14,6 +14,7 @@ export default function Suppliers() {
   const { t } = useTranslation();
   const { token } = useTokenStore();
   const { setSuppliers, selectedRestaurant } = useOrderStore();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const requestBody = {
@@ -27,25 +28,39 @@ export default function Suppliers() {
       })
       .then((response) => {
         setSuppliers(response.data.supplier);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error al obtener los proveedores:", error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <section className="suppliers">
-      <div className="tittle-suppliers">
-        <Link to="/restaurants">
-          <Icon src="google.com" icon="ic:round-arrow-back" className="arrow" />
-        </Link>
-        <h1 className="tittle-restaurants"> {t("suppliers.title")} </h1>
-      </div>
-      <CardSuppliers></CardSuppliers>
-      <Link className="bttn btn-primary" id="my-intercom">
-        <Icon className="icon-plus" icon="simple-line-icons:plus" />
-        {t("suppliers.addSuppliers")}
-      </Link>
+      {!isLoading ? (
+        <>
+          <div className="tittle-suppliers">
+            <Link to="/restaurants">
+              <Icon
+                src="google.com"
+                icon="ic:round-arrow-back"
+                className="arrow"
+              />
+            </Link>
+            <h1 className="tittle-restaurants"> {t("suppliers.title")} </h1>
+          </div>
+          <CardSuppliers></CardSuppliers>
+          <Link className="bttn btn-primary" id="my-intercom">
+            <Icon className="icon-plus" icon="simple-line-icons:plus" />
+            {t("suppliers.addSuppliers")}
+          </Link>
+        </>
+      ) : (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
       <div className="space-menu"></div>
       <MenuPrimary />
     </section>

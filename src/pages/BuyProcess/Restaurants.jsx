@@ -48,7 +48,7 @@ export default function Restaurants() {
 
   return (
     <section className="restaurants">
-      {!isLoading && (
+      {!isLoading ? (
         <>
           <h1 className="tittle-restaurants">
             {" "}
@@ -78,6 +78,10 @@ export default function Restaurants() {
           </Link>
           <div className="space-menu"></div>
         </>
+      ) : (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
       )}
     </section>
   );
