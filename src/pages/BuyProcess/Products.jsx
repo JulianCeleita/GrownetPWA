@@ -12,6 +12,8 @@ import { supplierCategorie, supplierProducts } from "../../config/urls.config";
 import "../../css/products.css";
 import useOrderStore from "../../store/useOrderStore";
 import useTokenStore from "../../store/useTokenStore";
+import { set } from "date-fns";
+import { use } from "i18next";
 
 export default function Products(props) {
   const { t } = useTranslation();
@@ -25,16 +27,19 @@ export default function Products(props) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [resetInput, setResetInput] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+  const [loading, setLoading] = useState(false);
   const loader = useRef(null);
-  const fetchProducts = async (page = 0) => {
-    const requestBody = {
-      id: selectedSupplier.id,
-      country: countryCode,
-      accountNumber: selectedRestaurant.accountNumber,
-      page,
-    };
-
+  
+  const fetchProducts = async (page) => {
     try {
+      setLoading(true);
+      const requestBody = {
+        id: selectedSupplier.id,
+        country: countryCode,
+        accountNumber: selectedRestaurant.accountNumber,
+        page: page,
+      };
+
       const response = await axios.post(`${supplierProducts}`, requestBody, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -76,25 +81,64 @@ export default function Products(props) {
         );
 
       // Filtrar productos para asegurar IDs únicos
-      const uniqueProducts = Array.from(
-        new Set(productsWithTax.map((product) => product.id))
-      ).map((id) => productsWithTax.find((product) => product.id === id));
-
-      useOrderStore.setState({ articlesToPay: uniqueProducts });
-
-      setArticles(uniqueProducts);
-      setProducts(uniqueProducts);
+      setArticles((prevProducts) => {
+        const productIds = new Set(prevProducts.map((p) => p.id));
+        const newProducts = productsWithTax.filter(
+          (p) => !productIds.has(p.id)
+        );
+        return [...prevProducts, ...newProducts];
+      });
+       setLoading(false);
     } catch (error) {
       console.error("Error al obtener los productos del proveedor:", error);
     }
   };
 
+useEffect(() => {
+  fetchProducts(currentPage);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [currentPage]);
+
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      const currentLoader = loader.current;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const first = entries[0];
+          if (first.isIntersecting) {
+            setCurrentPage((prevPage) => prevPage + 1);
+          }
+        },
+        { threshold: 1.0 }
+      );
+      /* 
+      fetchProducts(currentPage); */
+      if (loader.current) {
+        observer.observe(loader.current);
+      }
+      return () => {
+        if (currentLoader) {
+          observer.unobserve(currentLoader);
+        }
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory]);
+
+  
+
+  // TRAER PRODUCTOS POR CATEGORIA 
+
   const fetchProductsByCategory = async (categoryId) => {
+    setLoading(true);
     if (categoryId === "All") {
+      setArticles([]);
+      setCurrentPage(0);
       await fetchProducts(currentPage);
 
       return;
     }
+    setCurrentPage(0);
     const requestBody = {
       supplier: selectedSupplier.id,
       categorie: categoryId,
@@ -151,25 +195,25 @@ export default function Products(props) {
 
       setArticles(uniqueProducts);
       setProducts(uniqueProducts);
+      setLoading(false);
     } catch (error) {
       console.error("Error al obtener los productos por categoría:", error);
     }
   };
 
-  useEffect(() => {
+/*   useEffect(() => {
     const fetchData = async () => {
       if (articlesToPay.length > 0) {
         setArticles(articlesToPay);
         setProducts(articlesToPay);
-      } else {
         await fetchProducts(currentPage);
-      }
+      } 
     };
     console.log("articlesToPay:", articlesToPay);
     fetchData();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, articlesToPay]);
+  }, [currentPage]); */
 
   const resetInputSearcher = () => {
     setResetInput((prevKey) => prevKey + 1);
@@ -234,31 +278,7 @@ export default function Products(props) {
   const toggleProductSearch = () => {
     setShowProductSearch(!showProductSearch);
   };
-  // PAGINATION
 
-  // useEffect(() => {
-  //   const currentLoader = loader.current;
-  //   const observer = new IntersectionObserver(
-  //     (entries) => {
-  //       if (entries[0].isIntersecting) {
-  //         setCurrentPage((prevPage) => prevPage + 1);
-  //       }
-  //     },
-  //     { threshold: 1.0 }
-  //   );
-
-  //   if (loader.current) {
-  //     observer.observe(loader.current);
-  //   }
-
-  //   return () => {
-  //     if (currentLoader) {
-  //       observer.unobserve(currentLoader);
-  //     }
-  //   };
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   return (
     <section className="products">
@@ -316,9 +336,11 @@ export default function Products(props) {
           )}
         </>
       )}
-      {/* <div ref={loader} className="loader-container">
-        <div className="loader"></div>
-      </div> */}
+        <div ref={loader} className="loader-container">
+      {loading && (
+          <div className="loader"></div>
+          )}
+          </div>
       <div className="space-CatgMenu"></div>
       {
         <CategoriesMenu
