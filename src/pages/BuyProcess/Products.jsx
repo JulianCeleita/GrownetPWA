@@ -132,7 +132,7 @@ useEffect(() => {
   const fetchProductsByCategory = async (categoryId) => {
     setLoading(true);
     if (categoryId === "All") {
-      setArticles([]);
+      /* setArticles([]); */
       setCurrentPage(0);
       await fetchProducts(currentPage);
       return;
