@@ -10,7 +10,7 @@ export default function Suppliers() {
     setArticlesToPay,
   } = useOrderStore();
   const urlImg =
-    "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/";
+    "https://api.grownetapp.com/grownet/";
 
   const handleSupplierSelect = (supplier) => {
     setSelectedSupplier(supplier);

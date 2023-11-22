@@ -30,7 +30,7 @@ export default function ProductCard({
 
   const { token } = useTokenStore();
   const urlImg =
-    "https://ec2-13-58-203-20.us-east-2.compute.amazonaws.com/grownet/";
+    "https://api.grownetapp.com/grownet/";
   const selectedUom = prices.find((price) => price.nameUoms === uomToPay);
 
   const handleToggleFavorite = useCallback(async () => {
@@ -83,7 +83,6 @@ export default function ProductCard({
       await reloadFavorites();
     } else {
       await fetchProducts(currentPage);
-      console.log("currentPage:", currentPage);
     }
   }, [
     productData,

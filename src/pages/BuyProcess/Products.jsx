@@ -207,20 +207,6 @@ useEffect(() => {
     }
   };
 
-/*   useEffect(() => {
-    const fetchData = async () => {
-      if (articlesToPay.length > 0) {
-        setArticles(articlesToPay);
-        setProducts(articlesToPay);
-        await fetchProducts(currentPage);
-      } 
-    };
-    console.log("articlesToPay:", articlesToPay);
-    fetchData();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]); */
-
   const resetInputSearcher = () => {
     setResetInput((prevKey) => prevKey + 1);
   };

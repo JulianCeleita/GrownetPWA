@@ -33,21 +33,11 @@ export default function Reception() {
 
   const onChangeSolution = (e) => {
     e.persist();
-    console.log(e.target.value);
 
     setItem((prevState) => ({
       ...prevState,
       kindOfStand: e.target.value,
     }));
-  };
-
-  const handleFilesChange = (e) => {
-    if (e.target.files.length > 10) {
-      alert("No puedes subir más de 10 imágenes.");
-      return;
-    }
-    const fileArray = Array.from(e.target.files);
-    setEvidences(fileArray);
   };
 
   const handleQuantityChange = (e) => {
@@ -61,7 +51,6 @@ export default function Reception() {
   // ENVIAR LA DISPUTA
   const handleSubmit = (e) => {
     e.preventDefault();
-    //alert(`${kindOfStand}`);
     setShow(true);
     const formData = new FormData();
 

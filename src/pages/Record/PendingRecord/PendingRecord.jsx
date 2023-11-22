@@ -28,8 +28,6 @@ export default function PendingRecord() {
   const { selectedPendingOrder, detailsToShow, setDetailsToShow } =
     useRecordStore();
 
-  console.log(detailsToShow.id_stateOrders, "hola");
-
   useEffect(() => {
     if (evidences.length === 0) {
       setButtonEvidence("upload");
@@ -87,7 +85,6 @@ export default function PendingRecord() {
         },
       })
       .then((response) => {
-        console.log(response.data);
         setShowEvidencesModal(true);
         setEvidences([]);
         setButtonEvidence("upload");

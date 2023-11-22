@@ -27,7 +27,6 @@ export default function RegisterPage() {
   const { firstName, lastName, email, password } = data;
 
   const handleSubmit = async (e) => {
-    console.log("djkddhf");
     e.preventDefault();
     console.log(data);
     try {

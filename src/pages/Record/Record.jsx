@@ -22,9 +22,9 @@ export default function Record() {
     setPendingOrders,
     setClosedOrders,
     setSelectedPendingOrder,
-    setSelectedClosedOrder,
   } = useRecordStore();
   const { selectedRestaurant } = useOrderStore();
+  const [isLoading, setIsLoading] = useState(true);
   const apiOrders = allStorageOrders + selectedRestaurant.accountNumber;
 
   useEffect(() => {
@@ -43,13 +43,15 @@ export default function Record() {
         );
         setClosedOrders(closedOrders);
         setPendingOrders(pendingOrders);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log("Error al llamar las ordenes", error);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(pendingOrders, "hola");
+  
+
   // Filtro buscador
   const [selectedDate, setSelectedDate] = useState("");
   const handlePendingOrderSelect = (orderReference) => {
@@ -66,139 +68,148 @@ export default function Record() {
   };
   return (
     <>
-      <section className="record">
-        <h1>{t("record.title")}</h1>
-        {pendingOrders.length === 0 && closedOrders.length === 0 ? (
-          <div className="record-zero">
-            <img src={img_succesful} alt="person-with-a-phone" />
-            <h1>{t("record.noOrders")} </h1>
-            <Link to="/suppliers" className="bttn btn-primary">
-              {t("record.bttnNoOrders")}
-            </Link>
-          </div>
-        ) : (
-          <>
-            <div className="flex-container">
-              <form className="search-form">
-                <input
-                  type="date"
-                  placeholder={t("record.searchPlaceholder")}
-                  className="search-input"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                />
-              </form>
+      {!isLoading ? (
+        <section className="record">
+          <h1>{t("record.title")}</h1>
+          {pendingOrders.length === 0 && closedOrders.length === 0 ? (
+            <div className="record-zero">
+              <img src={img_succesful} alt="person-with-a-phone" />
+              <h1>{t("record.noOrders")} </h1>
+              <Link to="/suppliers" className="bttn btn-primary">
+                {t("record.bttnNoOrders")}
+              </Link>
             </div>
-            <Tabs
-              defaultActiveKey="pending"
-              id="uncontrolled-tab-example"
-              className="mb-3"
-            >
-              {/* CLOSED ORDERS */}
-              <Tab eventKey="home" title={t("record.pastOrders")}>
-                {closedOrders.map((order) => {
-                  if (!selectedDate || order.date_delivery === selectedDate) {
-                    return (
-                      <div className="card-record" key={order.reference}>
-                        <div className="information-past">
-                          <div className="">
-                            <h4>{t("record.orderNumber")}</h4>
-                            <p>{order.reference}</p>
+          ) : (
+            <>
+              <div className="flex-container">
+                <form className="search-form">
+                  <input
+                    type="date"
+                    placeholder={t("record.searchPlaceholder")}
+                    className="search-input"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                  />
+                </form>
+              </div>
+              <Tabs
+                defaultActiveKey="pending"
+                id="uncontrolled-tab-example"
+                className="mb-3"
+              >
+                {/* CLOSED ORDERS */}
+                <Tab eventKey="home" title={t("record.pastOrders")}>
+                  {closedOrders.map((order) => {
+                    if (!selectedDate || order.date_delivery === selectedDate) {
+                      return (
+                        <div className="card-record" key={order.reference}>
+                          <div className="information-past">
+                            <div className="">
+                              <h4>{t("record.orderNumber")}</h4>
+                              <p>{order.reference}</p>
+                            </div>
+                            <div className="open-dispute">
+                              <h4>{t("record.date")}</h4>
+                              <p>{order.date_delivery}</p>
+                            </div>
                           </div>
-                          <div className="open-dispute">
-                            <h4>{t("record.date")}</h4>
-                            <p>{order.date_delivery}</p>
-                          </div>
-                        </div>
-                        <div className="information-past o2" id="o2">
-                          <div>
-                            <h4>{t("record.amount")}</h4>
-                            <p>£{order.total}</p>
-                          </div>
-                          <Link
-                            className="bttn btn-primary"
-                            onClick={() =>
-                              handlePendingOrderSelect(order.reference)
-                            }
-                            to={"pastRecord"}
-                          >
-                            {t("record.viewDetails")}
-                          </Link>
-                        </div>
-                      </div>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
-
-                {/* CURRENT ORDERS */}
-              </Tab>
-              <Tab eventKey="pending" title={t("record.currentOrders")}>
-                {pendingOrders.map((order) => {
-                  if (!selectedDate || order.date_delivery === selectedDate) {
-                    return (
-                      <div className="card-record" key={order.reference}>
-                        <div className="information-past">
-                          <div className="">
-                            <h4>{t("record.orderNumber")}</h4>
-                            <p>{order.reference}</p>
-                          </div>
-                          <div className="open-dispute">
-                            <h4>{t("record.date")}</h4>
-                            <p>{order.date_delivery}</p>
-                          </div>
-                        </div>
-                        <div className="information-past o2" id="o2">
-                          <div>
-                            <h4>{t("record.amount")}</h4>
-                            <p>£{order.total}</p>
-                          </div>
-                          <div className="right-button-record">
+                          <div className="information-past o2" id="o2">
+                            <div>
+                              <h4>{t("record.amount")}</h4>
+                              <p>£{order.total}</p>
+                            </div>
                             <Link
                               className="bttn btn-primary"
                               onClick={() =>
                                 handlePendingOrderSelect(order.reference)
                               }
-                              to={"pendingRecord"}
+                              to={"pastRecord"}
                             >
                               {t("record.viewDetails")}
                             </Link>
-                            {order.id_stateOrders === 6 && (
-                              <div className="alert-icon">
-                                <Icon
-                                  id="dispute-icon"
-                                  icon="pajamas:warning"
-                                />
-                                <p id="dispute-text">
-                                  {t("record.openDispute")}
-                                </p>
-                              </div>
-                            )}
                           </div>
                         </div>
-                      </div>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
-              </Tab>
-            </Tabs>
-            {selectedDate &&
-              !pendingOrders.some(
-                (order) => order.date_delivery === selectedDate
-              ) && (
-                <div className="date-zero-record">
-                  <Icon icon="mingcute:warning-line" className="warning-icon" />
-                  <p>{t("record.noOrdersDate")}</p>
-                  <h5>{selectedDate}</h5>
-                </div>
-              )}
-          </>
-        )}
-        <div className="space-menu"></div>
-      </section>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+
+                  {/* CURRENT ORDERS */}
+                </Tab>
+                <Tab eventKey="pending" title={t("record.currentOrders")}>
+                  {pendingOrders.map((order) => {
+                    if (!selectedDate || order.date_delivery === selectedDate) {
+                      return (
+                        <div className="card-record" key={order.reference}>
+                          <div className="information-past">
+                            <div className="">
+                              <h4>{t("record.orderNumber")}</h4>
+                              <p>{order.reference}</p>
+                            </div>
+                            <div className="open-dispute">
+                              <h4>{t("record.date")}</h4>
+                              <p>{order.date_delivery}</p>
+                            </div>
+                          </div>
+                          <div className="information-past o2" id="o2">
+                            <div>
+                              <h4>{t("record.amount")}</h4>
+                              <p>£{order.total}</p>
+                            </div>
+                            <div className="right-button-record">
+                              <Link
+                                className="bttn btn-primary"
+                                onClick={() =>
+                                  handlePendingOrderSelect(order.reference)
+                                }
+                                to={"pendingRecord"}
+                              >
+                                {t("record.viewDetails")}
+                              </Link>
+                              {order.id_stateOrders === 6 && (
+                                <div className="alert-icon">
+                                  <Icon
+                                    id="dispute-icon"
+                                    icon="pajamas:warning"
+                                  />
+                                  <p id="dispute-text">
+                                    {t("record.openDispute")}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+                </Tab>
+              </Tabs>
+              {selectedDate &&
+                !pendingOrders.some(
+                  (order) => order.date_delivery === selectedDate
+                ) && (
+                  <div className="date-zero-record">
+                    <Icon
+                      icon="mingcute:warning-line"
+                      className="warning-icon"
+                    />
+                    <p>{t("record.noOrdersDate")}</p>
+                    <h5>{selectedDate}</h5>
+                  </div>
+                )}
+            </>
+          )}
+          <div className="space-menu"></div>
+        </section>
+      ) : (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
       <MenuPrimary />
     </>
   );

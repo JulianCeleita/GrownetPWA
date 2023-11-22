@@ -381,7 +381,6 @@ export default function OrderInformation() {
       total_tax: totalTaxes,
       products: jsonProducts,
     };
-    console.log(jsonOrderData, "este es  :DDD");
     try {
       const response = await axios.post(createStorageOrder, jsonOrderData, {
         headers: {
@@ -390,10 +389,6 @@ export default function OrderInformation() {
       });
       const newOrderNumber = response.data.reference;
       setOrderNumber(newOrderNumber);
-      console.log(
-        "Respuesta exitosa al crear la orden",
-        response.data.reference
-      );
       return newOrderNumber;
     } catch (error) {
       console.log("Error al crear la orden", error);
