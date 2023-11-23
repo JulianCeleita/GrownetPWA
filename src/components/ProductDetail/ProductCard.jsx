@@ -14,7 +14,7 @@ export default function ProductCard({
   onAmountChange,
   onUomChange,
   opacity,
-  reloadFavorites,
+  fetchFavorites = async () => {},
   fetchProducts,
   currentPage,
 }) {
@@ -29,8 +29,7 @@ export default function ProductCard({
   });
 
   const { token } = useTokenStore();
-  const urlImg =
-    "https://api.grownetapp.com/grownet/";
+  const urlImg = "https://api.grownetapp.com/grownet/";
   const selectedUom = prices.find((price) => price.nameUoms === uomToPay);
 
   const handleToggleFavorite = useCallback(async () => {
@@ -80,7 +79,7 @@ export default function ProductCard({
       console.error("Error al gestionar el favorito:", error);
     }
     if (opacity) {
-      await reloadFavorites();
+      await fetchFavorites();
     } else {
       await fetchProducts(currentPage);
     }
@@ -91,7 +90,7 @@ export default function ProductCard({
     selectedRestaurant.accountNumber,
     selectedSupplier.id,
     token,
-    reloadFavorites,
+    fetchFavorites,
     fetchProducts,
     currentPage,
   ]);
