@@ -4,11 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import CategoriesMenu from "../../components/CategoriesMenu/CategoriesMenu";
-import Favorites from "../../components/Favorites";
 import ProductCard from "../../components/ProductDetail/ProductCard";
 import ProductSearcher from "../../components/ProductSearcher/ProductSearcher";
 import ProductsFind from "../../components/ProductSearcher/ProductsFind";
-import { supplierCategorie, supplierProducts } from "../../config/urls.config";
+import {
+  favoritesBySupplier,
+  supplierCategorie,
+  supplierProducts,
+} from "../../config/urls.config";
 import "../../css/products.css";
 import useOrderStore from "../../store/useOrderStore";
 import useTokenStore from "../../store/useTokenStore";
@@ -27,7 +30,7 @@ export default function Products(props) {
   const [currentPage, setCurrentPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const loader = useRef(null);
-  
+
   const fetchProducts = async (page) => {
     try {
       setLoading(true);
@@ -86,16 +89,16 @@ export default function Products(props) {
         );
         return [...prevProducts, ...newProducts];
       });
-       setLoading(false);
+      setLoading(false);
     } catch (error) {
       console.error("Error al obtener los productos del proveedor:", error);
     }
   };
 
-useEffect(() => {
-  fetchProducts(currentPage);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [currentPage]);
+  useEffect(() => {
+    fetchProducts(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   useEffect(() => {
     if (selectedCategory === "All") {
@@ -123,9 +126,7 @@ useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
-  
-
-  // TRAER PRODUCTOS POR CATEGORIA 
+  // TRAER PRODUCTOS POR CATEGORIA
 
   const fetchProductsByCategory = async (categoryId) => {
     setLoading(true);
@@ -209,12 +210,77 @@ useEffect(() => {
     setResetInput((prevKey) => prevKey + 1);
   };
 
+  const fetchFavorites = async () => {
+    setLoading(true);
+    setCurrentPage(0);
+    const requestBody = {
+      supplier_id: selectedSupplier.id,
+    };
+
+    try {
+      const response = await axios.post(favoritesBySupplier, requestBody, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const defaultFavorites = response.data.favorites;
+
+      const productsWithTax = defaultFavorites
+        .filter((product) => product.prices.some((price) => price.nameUoms))
+        .map((product) => {
+          const pricesWithTax = product.prices.map((price) => {
+            const priceWithTaxCalculation = (
+              price.price +
+              price.price * product.tax
+            ).toFixed(2);
+
+            return {
+              ...price,
+              priceWithTax:
+                isNaN(priceWithTaxCalculation) ||
+                parseFloat(priceWithTaxCalculation) === 0
+                  ? null
+                  : priceWithTaxCalculation,
+            };
+          });
+
+          return {
+            ...product,
+            amount: 0,
+            uomToPay: product.prices[0].nameUoms,
+            idUomToPay: product.prices[0].id,
+            prices: pricesWithTax,
+          };
+        })
+
+        .filter((product) => {
+          const isValidProduct = product.prices.some(
+            (price) => price.priceWithTax && parseFloat(price.priceWithTax) > 0
+          );
+
+          return isValidProduct;
+        });
+      const uniqueProducts = Array.from(
+        new Set(productsWithTax.map((product) => product.id))
+      ).map((id) => productsWithTax.find((product) => product.id === id));
+
+      useOrderStore.setState({ articlesToPay: uniqueProducts });
+      setProducts(uniqueProducts);
+      setArticles(uniqueProducts);
+      console.log("uniqueProducts:", uniqueProducts);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error al obtener los productos del proveedor:", error);
+    }
+  };
+  console.log("articles:", articles);
   const toggleShowFavorites = async () => {
     setShowFavorites(!showFavorites);
 
     resetInputSearcher();
     try {
-      await fetchProducts(currentPage);
+      await fetchFavorites();
     } catch (error) {
       console.error("Error al obtener productos al mostrar favoritos:", error);
     }
@@ -269,7 +335,6 @@ useEffect(() => {
     setShowProductSearch(!showProductSearch);
   };
 
-
   return (
     <section className="products">
       <div className="tittle-page">
@@ -296,11 +361,26 @@ useEffect(() => {
       ) : (
         <>
           {showFavorites ? (
-            <Favorites
-              onAmountChange={handleAmountChange}
-              onUomChange={handleUomChange}
-              opacity
-            />
+            <>
+              <p>
+                {t("favorites.findFirstPart")} {products.length}{" "}
+                {t("favorites.findSecondPart")}{" "}
+              </p>
+              {products.map((article) => (
+                <section key={article.id}>
+                  <ProductCard
+                    key={article.id}
+                    productData={article}
+                    onAmountChange={handleAmountChange}
+                    onUomChange={handleUomChange}
+                    fetchProducts={fetchProducts}
+                    currentPage={currentPage}
+                    fetchFavorites={fetchFavorites}
+                    opacity
+                  />
+                </section>
+              ))}
+            </>
           ) : (
             <>
               {articles
@@ -326,11 +406,9 @@ useEffect(() => {
           )}
         </>
       )}
-        <div ref={loader} className="loader-container">
-      {loading && (
-          <div className="loader"></div>
-          )}
-          </div>
+      <div ref={loader} className="loader-container">
+        {loading && <div className="loader"></div>}
+      </div>
       <div className="space-CatgMenu"></div>
       {
         <CategoriesMenu
