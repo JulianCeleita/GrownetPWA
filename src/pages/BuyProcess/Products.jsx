@@ -89,6 +89,7 @@ export default function Products(props) {
         );
         return [...prevProducts, ...newProducts];
       });
+
       setLoading(false);
     } catch (error) {
       console.error("Error al obtener los productos del proveedor:", error);
@@ -97,6 +98,7 @@ export default function Products(props) {
 
   useEffect(() => {
     fetchProducts(currentPage);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
@@ -215,6 +217,7 @@ export default function Products(props) {
     setCurrentPage(0);
     const requestBody = {
       supplier_id: selectedSupplier.id,
+      accountNumber: selectedRestaurant.accountNumber,
     };
 
     try {
@@ -253,7 +256,6 @@ export default function Products(props) {
             prices: pricesWithTax,
           };
         })
-
         .filter((product) => {
           const isValidProduct = product.prices.some(
             (price) => price.priceWithTax && parseFloat(price.priceWithTax) > 0
@@ -261,23 +263,27 @@ export default function Products(props) {
 
           return isValidProduct;
         });
-      const uniqueProducts = Array.from(
-        new Set(productsWithTax.map((product) => product.id))
-      ).map((id) => productsWithTax.find((product) => product.id === id));
 
-      useOrderStore.setState({ articlesToPay: uniqueProducts });
-      setProducts(uniqueProducts);
-      setArticles(uniqueProducts);
-      console.log("uniqueProducts:", uniqueProducts);
+      // setArticles((prevProducts) => {
+      //   const productIds = new Set(prevProducts.map((p) => p.id));
+      //   const newProducts = productsWithTax.filter(
+      //     (p) => !productIds.has(p.id)
+      //   );
+      //   return [...prevProducts, ...newProducts];
+      // });
+
+      setArticles(productsWithTax);
+
       setLoading(false);
     } catch (error) {
       console.error("Error al obtener los productos del proveedor:", error);
     }
   };
+
   console.log("articles:", articles);
   const toggleShowFavorites = async () => {
     setShowFavorites(!showFavorites);
-
+    setSelectedCategory("All");
     resetInputSearcher();
     try {
       await fetchFavorites();
@@ -363,23 +369,27 @@ export default function Products(props) {
           {showFavorites ? (
             <>
               <p>
-                {t("favorites.findFirstPart")} {products.length}{" "}
+                {t("favorites.findFirstPart")}{" "}
+                {articles.filter((article) => article.active === 1).length}{" "}
                 {t("favorites.findSecondPart")}{" "}
               </p>
-              {products.map((article) => (
-                <section key={article.id}>
-                  <ProductCard
-                    key={article.id}
-                    productData={article}
-                    onAmountChange={handleAmountChange}
-                    onUomChange={handleUomChange}
-                    fetchProducts={fetchProducts}
-                    currentPage={currentPage}
-                    fetchFavorites={fetchFavorites}
-                    opacity
-                  />
-                </section>
-              ))}
+              {articles.map(
+                (article) =>
+                  article.active === 1 && (
+                    <section key={article.id}>
+                      <ProductCard
+                        key={article.id}
+                        productData={article}
+                        onAmountChange={handleAmountChange}
+                        onUomChange={handleUomChange}
+                        fetchProducts={fetchProducts}
+                        currentPage={currentPage}
+                        fetchFavorites={fetchFavorites}
+                        opacity
+                      />
+                    </section>
+                  )
+              )}
             </>
           ) : (
             <>
