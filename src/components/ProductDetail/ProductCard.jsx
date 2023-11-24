@@ -55,7 +55,6 @@ export default function ProductCard({
         supplier_id: selectedSupplier.id,
         active: newFavoriteState ? 1 : 0,
       };
-      console.log("restaurante", requestData);
       const response = await axios.post(addFavorite, requestData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -66,8 +65,6 @@ export default function ProductCard({
         ...prevState,
         isFavoritePending: false,
       }));
-
-      console.log("Toggle favorite response:", response.data);
     } catch (error) {
       setProductState((prevState) => ({
         ...prevState,

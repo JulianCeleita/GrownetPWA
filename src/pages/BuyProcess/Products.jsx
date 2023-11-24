@@ -279,8 +279,6 @@ export default function Products(props) {
       console.error("Error al obtener los productos del proveedor:", error);
     }
   };
-
-  console.log("articles:", articles);
   const toggleShowFavorites = async () => {
     setShowFavorites(!showFavorites);
     setSelectedCategory("All");
