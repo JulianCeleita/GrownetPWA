@@ -99,16 +99,13 @@ export default function PendingRecord() {
   // ENVIAR CORREO DE DISPUTA
 
   const onSendMail = () => {
-    console.log(`${sendEmail}/${selectedPendingOrder}`);
-    console.log(token);
     axios
-      .post(`${sendEmail}/${selectedPendingOrder}`, {
+      .get(`${sendEmail}/${selectedPendingOrder}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
-        console.log(response.data);
         setShowEmailModal(true);
       })
       .catch((error) => {

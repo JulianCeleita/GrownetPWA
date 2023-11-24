@@ -46,4 +46,4 @@ export const createDisputeOrder =
 export const closeSelectedOrder =
   "https://api.grownetapp.com/grownet/api/orders/state";
 export const sendEmail =
-  "https://api.grownetapp.com/grownet/api/disputeOrder/send-email";
+  "https://api.grownetapp.com/grownet/api/disputeOrder/sendEmail";
