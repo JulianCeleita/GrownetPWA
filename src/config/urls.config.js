@@ -39,9 +39,11 @@ export const addFavorite =
   "https://api.grownetapp.com/grownet/api/products/favorite";
 export const favoritesBySupplier =
   "https://api.grownetapp.com/grownet/api/products/favoritesBySupplier";
-  
+
 // DISPUTES
 export const createDisputeOrder =
   "https://api.grownetapp.com/grownet/api/disputeOrder/create";
 export const closeSelectedOrder =
   "https://api.grownetapp.com/grownet/api/orders/state";
+export const sendEmail =
+  "https://api.grownetapp.com/grownet/api/disputeOrder/send-email";

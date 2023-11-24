@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Tab, Tabs } from "react-bootstrap";
+import { Button, Tab, Tabs } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import {
   closeSelectedOrder,
   createDisputeOrder,
   selectedStorageOrder,
+  sendEmail,
 } from "../../../config/urls.config";
 import "../../../css/pendingRecord.css";
 import "../../../css/reception.css";
@@ -23,6 +24,7 @@ export default function PendingRecord() {
   const [evidences, setEvidences] = useState([]);
   const [buttonEvidence, setButtonEvidence] = useState("upload");
   const [showEvidencesModal, setShowEvidencesModal] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState({});
   const [showWarningModal, setShowWarningModal] = useState(false);
   const { selectedPendingOrder, detailsToShow, setDetailsToShow } =
@@ -91,6 +93,26 @@ export default function PendingRecord() {
       })
       .catch((error) => {
         console.error("Error al crear la disputa:", error);
+      });
+  };
+
+  // ENVIAR CORREO DE DISPUTA
+
+  const onSendMail = () => {
+    console.log(`${sendEmail}/${selectedPendingOrder}`);
+    console.log(token);
+    axios
+      .post(`${sendEmail}/${selectedPendingOrder}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setShowEmailModal(true);
+      })
+      .catch((error) => {
+        console.log("Error al enviar el correo", error);
       });
   };
 
@@ -270,6 +292,17 @@ export default function PendingRecord() {
                       />
                     </label>
                   )}
+                  <label
+                    type="submit"
+                    className="custom-file-upload"
+                    onClick={onSendMail}
+                  >
+                    {t("reception.sendEmail")}{" "}
+                    <Icon
+                      id="upload-icon"
+                      icon="tabler:arrow-big-right-filled"
+                    />
+                  </label>
                   <button
                     className="bttn btn-primary"
                     onClick={(e) => onConfirmOrder(e)}
@@ -297,6 +330,31 @@ export default function PendingRecord() {
                 <span className="grownet-pending">Grownet</span>
               </h1>
               <p>{t("pendingRecord.modalEvidenceText")}</p>
+              <Link
+                onClick={() => setShowEvidencesModal(false)}
+                className="bttn btn-primary"
+              >
+                {t("pendingRecord.modalButton")}
+              </Link>
+            </section>
+          </Modal>
+
+          {/* MODAL DE ENVIO DE CORREO CON EVIDENCIAS */}
+          <Modal
+            show={showEmailModal}
+            onHide={() => setShowEmailModal(false)}
+            className="modal-dispute"
+          >
+            <section className="alerta">
+              <Icon
+                icon="fluent-emoji:party-popper"
+                className="icon-reception"
+              />
+              <h1>
+                {t("pendingRecord.modalTittle")}{" "}
+                <span className="grownet-pending">Grownet</span>
+              </h1>
+              <p>{t("pendingRecord.modalMailText")}</p>
               <Link to="/record" className="bttn btn-primary">
                 {t("pendingRecord.modalButton")}
               </Link>

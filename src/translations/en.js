@@ -116,6 +116,7 @@ const enTranslations = {
     warningThirdPart: "and you confirm that everything was resolved.",
     warningConfirm: "Confirm order",
     warningCancel: "Cancel",
+    modalMailText: "The email with the disputes was sent to the supplier.",
   },
   reception: {
     title: "What went wrong?",
@@ -133,6 +134,7 @@ const enTranslations = {
     modalText: "Our team will verify the information",
     modalButton: "Continue",
     submitEvidence: "Submit evidence",
+    sendEmail: 'Send email with disputes',
   },
   settings: {
     title: "Settings",

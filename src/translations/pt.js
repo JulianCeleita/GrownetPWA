@@ -116,6 +116,7 @@ const ptTranslations = {
     warningThirdPart: "e confirme se tudo está resolvido.",
     warningConfirm: "Confirmar pedido",
     warningCancel: "Cancelar",
+    modalMailText: "O e-mail com as disputas foi enviado ao fornecedor.",
   },
   reception: {
     title: "O que deu errado?",
@@ -133,6 +134,7 @@ const ptTranslations = {
     modalText: "Nossa equipe verificará as informações",
     modalButton: "Continuar",
     submitEvidence: "Enviar evidência",
+    sendEmail: 'Enviar e-mail com disputas',
   },
   settings: {
     title: "Configurações",
